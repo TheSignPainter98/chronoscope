@@ -128,8 +128,10 @@ def load(pr: pr.parser, trace_path: str, fd_chunk_size=900, db_chunk_size=100):
             with db.atomic():
                 for table in TABLES:
                     t_name: str = table._meta.name  # type: ignore
+                    if t_name not in records:
+                        continue
                     for db_chunk in p.chunked(records[t_name], db_chunk_size):
-                        table.insert_many(db_chunk).execute()
+                        table.insert_many(db_chunk).on_conflict_ignore().execute()
 
 
 def iterate(origin: int, parent: None | int,
