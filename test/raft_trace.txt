@@ -1,0 +1,67 @@
+raft[1]: 2026-07-06T20:21:36.097410000 raft pid: 1 sm_id: 1 role=Follower term=1 log=0 ci=0 lc=0 eid=0x1000000000000001 |
+raft[1]: 2025-06-07T11:00:14.026305714 top-to-raft opid: 1 dpid: 1 id: 1111 id: 1 eid=0x1000000000000002 |
+raft[2]: 2026-07-06T20:21:36.098966000 raft pid: 2 sm_id: 2 role=Follower term=1 log=0 ci=0 lc=0 eid=0x2000000000000001 |
+raft[2]: 2025-06-07T11:00:14.026305714 top-to-raft opid: 1 dpid: 2 id: 1111 id: 2 eid=0x2000000000000002 |
+raft[3]: 2026-07-06T20:21:36.100404000 raft pid: 3 sm_id: 3 role=Follower term=1 log=0 ci=0 lc=0 eid=0x3000000000000001 |
+raft[3]: 2025-06-07T11:00:14.026305714 top-to-raft opid: 1 dpid: 3 id: 1111 id: 3 eid=0x3000000000000002 |
+raft[1]: 2026-07-06T20:21:36.100505000 raft pid: 1 sm_id: 1 et() eid=0x1000000000000003 |
+raft[1]: 2026-07-06T20:21:36.100523000 raft pid: 1 sm_id: 1 role=Candidate term=2 log=0 ci=0 lc=1 eid=0x1000000000000004 |
+raft[1]: 2026-07-06T20:21:36.100552000 event_relation pid: 1 sm_id: 1 peid=None eid=0x1000000000000005 |
+raft[1]: 2026-07-06T20:21:36.100565000 event_relation pid: 1 sm_id: 1 peid=None eid=0x1000000000000006 |
+raft[1]: 2026-07-06T20:21:36.100576000 event_relation pid: 1 sm_id: 1 peid=None eid=0x1000000000000007 |
+raft[1]: 2026-07-06T20:21:36.101013000 raft pid: 1 sm_id: 1 rv(o=1,d=1,t=2,lt=0,li=0) eid=0x1000000000000008 |
+raft[1]: 2026-07-06T20:21:36.101028000 event_relation pid: 1 sm_id: 1 peid=0x1000000000000005 eid=0x1000000000000008 |
+raft[1]: 2026-07-06T20:21:36.101043000 event_relation pid: 1 sm_id: 1 peid=None eid=0x1000000000000009 |
+raft[2]: 2026-07-06T20:21:36.101072000 raft pid: 2 sm_id: 2 role=Follower term=2 log=0 ci=0 lc=2 eid=0x2000000000000003 |
+raft[2]: 2026-07-06T20:21:36.101089000 raft pid: 2 sm_id: 2 rv(o=1,d=2,t=2,lt=0,li=0) eid=0x2000000000000004 |
+raft[2]: 2026-07-06T20:21:36.101100000 event_relation pid: 2 sm_id: 2 peid=0x1000000000000006 eid=0x2000000000000004 |
+raft[2]: 2026-07-06T20:21:36.101114000 event_relation pid: 2 sm_id: 2 peid=None eid=0x2000000000000005 |
+raft[3]: 2026-07-06T20:21:36.101142000 raft pid: 3 sm_id: 3 role=Follower term=2 log=0 ci=0 lc=2 eid=0x3000000000000003 |
+raft[3]: 2026-07-06T20:21:36.101160000 raft pid: 3 sm_id: 3 rv(o=1,d=3,t=2,lt=0,li=0) eid=0x3000000000000004 |
+raft[3]: 2026-07-06T20:21:36.101178000 event_relation pid: 3 sm_id: 3 peid=0x1000000000000007 eid=0x3000000000000004 |
+raft[3]: 2026-07-06T20:21:36.101199000 event_relation pid: 3 sm_id: 3 peid=None eid=0x3000000000000005 |
+raft[1]: 2026-07-06T20:21:36.101283000 raft pid: 1 sm_id: 1 rvr(o=1,d=1,t=2,vg=true) eid=0x100000000000000a |
+raft[1]: 2026-07-06T20:21:36.101296000 event_relation pid: 1 sm_id: 1 peid=0x1000000000000009 eid=0x100000000000000a |
+raft[1]: 2026-07-06T20:21:36.101314000 raft pid: 1 sm_id: 1 rvr(o=2,d=1,t=2,vg=true) eid=0x100000000000000b |
+raft[1]: 2026-07-06T20:21:36.101324000 event_relation pid: 1 sm_id: 1 peid=0x2000000000000005 eid=0x100000000000000b |
+raft[1]: 2026-07-06T20:21:36.101349000 raft pid: 1 sm_id: 1 becomeleader eid=0x100000000000000c |
+raft[1]: 2026-07-06T20:21:36.101359000 raft pid: 1 sm_id: 1 role=Leader term=2 log=0 ci=0 lc=4 eid=0x100000000000000d |
+raft[1]: 2026-07-06T20:21:36.102212000 raft pid: 1 sm_id: 1 rvr(o=3,d=1,t=2,vg=true) eid=0x100000000000000e |
+raft[1]: 2026-07-06T20:21:36.102229000 event_relation pid: 1 sm_id: 1 peid=0x3000000000000005 eid=0x100000000000000e |
+raft[1]: 2026-07-06T20:21:36.103131000 raft pid: 1 sm_id: 1 hbt() eid=0x100000000000000f |
+raft[1]: 2026-07-06T20:21:36.103159000 event_relation pid: 1 sm_id: 1 peid=None eid=0x1000000000000010 |
+raft[1]: 2026-07-06T20:21:36.103175000 event_relation pid: 1 sm_id: 1 peid=None eid=0x1000000000000011 |
+raft[2]: 2026-07-06T20:21:36.103698000 raft pid: 2 sm_id: 2 ae(o=1,d=2,t=2,ci=0,pli=0,e=[(t:2,v:FixtureEntryBuilder { raft_write_handle: RaftEntryBuilder { configuration: None }, data: None })]) eid=0x2000000000000006 |
+raft[2]: 2026-07-06T20:21:36.103733000 event_relation pid: 2 sm_id: 2 peid=0x1000000000000010 eid=0x2000000000000006 |
+raft[2]: 2026-07-06T20:21:36.104352000 event_relation pid: 2 sm_id: 2 peid=None eid=0x2000000000000007 |
+raft[3]: 2026-07-06T20:21:36.104478000 raft pid: 3 sm_id: 3 ae(o=1,d=3,t=2,ci=0,pli=0,e=[(t:2,v:FixtureEntryBuilder { raft_write_handle: RaftEntryBuilder { configuration: None }, data: None })]) eid=0x3000000000000006 |
+raft[3]: 2026-07-06T20:21:36.104498000 event_relation pid: 3 sm_id: 3 peid=0x1000000000000011 eid=0x3000000000000006 |
+raft[3]: 2026-07-06T20:21:36.104943000 event_relation pid: 3 sm_id: 3 peid=None eid=0x3000000000000007 |
+raft[1]: 2026-07-06T20:21:36.105129000 raft pid: 1 sm_id: 1 aer(o=2,d=1,t=2,mi=1) eid=0x1000000000000012 |
+raft[1]: 2026-07-06T20:21:36.105149000 event_relation pid: 1 sm_id: 1 peid=0x2000000000000007 eid=0x1000000000000012 |
+raft[1]: 2026-07-06T20:21:36.105241000 raft pid: 1 sm_id: 1 aci(to=1) eid=0x1000000000000013 |
+raft[1]: 2026-07-06T20:21:36.105266000 raft pid: 1 sm_id: 1 aer(o=3,d=1,t=2,mi=1) eid=0x1000000000000014 |
+raft[1]: 2026-07-06T20:21:36.105278000 event_relation pid: 1 sm_id: 1 peid=0x3000000000000007 eid=0x1000000000000014 |
+raft[1]: 2026-07-06T20:21:36.105701000 raft pid: 1 sm_id: 1 hbt() eid=0x1000000000000015 |
+raft[1]: 2026-07-06T20:21:36.105768000 event_relation pid: 1 sm_id: 1 peid=None eid=0x1000000000000016 |
+raft[1]: 2026-07-06T20:21:36.105835000 event_relation pid: 1 sm_id: 1 peid=None eid=0x1000000000000017 |
+raft[2]: 2026-07-06T20:21:36.106376000 raft pid: 2 sm_id: 2 ae(o=1,d=2,t=2,ci=1,pli=1,e=[(t:2,v:FixtureEntryBuilder { raft_write_handle: RaftEntryBuilder { configuration: None }, data: Some("V1") })]) eid=0x2000000000000008 |
+raft[2]: 2026-07-06T20:21:36.106411000 event_relation pid: 2 sm_id: 2 peid=0x1000000000000016 eid=0x2000000000000008 |
+raft[2]: 2026-07-06T20:21:36.107050000 event_relation pid: 2 sm_id: 2 peid=None eid=0x2000000000000009 |
+raft[3]: 2026-07-06T20:21:36.107162000 raft pid: 3 sm_id: 3 ae(o=1,d=3,t=2,ci=1,pli=1,e=[(t:2,v:FixtureEntryBuilder { raft_write_handle: RaftEntryBuilder { configuration: None }, data: Some("V1") })]) eid=0x3000000000000008 |
+raft[3]: 2026-07-06T20:21:36.107190000 event_relation pid: 3 sm_id: 3 peid=0x1000000000000017 eid=0x3000000000000008 |
+raft[3]: 2026-07-06T20:21:36.107605000 event_relation pid: 3 sm_id: 3 peid=None eid=0x3000000000000009 |
+raft[1]: 2026-07-06T20:21:36.107739000 raft pid: 1 sm_id: 1 aer(o=2,d=1,t=2,mi=2) eid=0x1000000000000018 |
+raft[1]: 2026-07-06T20:21:36.107757000 event_relation pid: 1 sm_id: 1 peid=0x2000000000000009 eid=0x1000000000000018 |
+raft[1]: 2026-07-06T20:21:36.107819000 raft pid: 1 sm_id: 1 aci(to=2) eid=0x1000000000000019 |
+raft[1]: 2026-07-06T20:21:36.107843000 raft pid: 1 sm_id: 1 aer(o=3,d=1,t=2,mi=2) eid=0x100000000000001a |
+raft[1]: 2026-07-06T20:21:36.107855000 event_relation pid: 1 sm_id: 1 peid=0x3000000000000009 eid=0x100000000000001a |
+raft[1]: 2026-07-06T20:21:36.108605000 raft pid: 1 sm_id: 1 hbt() eid=0x100000000000001b |
+raft[1]: 2026-07-06T20:21:36.108658000 event_relation pid: 1 sm_id: 1 peid=None eid=0x100000000000001c |
+raft[1]: 2026-07-06T20:21:36.108705000 event_relation pid: 1 sm_id: 1 peid=None eid=0x100000000000001d |
+raft[2]: 2026-07-06T20:21:36.109041000 raft pid: 2 sm_id: 2 ae(o=1,d=2,t=2,ci=2,pli=2,e=[]) eid=0x200000000000000a |
+raft[2]: 2026-07-06T20:21:36.109059000 event_relation pid: 2 sm_id: 2 peid=0x100000000000001c eid=0x200000000000000a |
+raft[2]: 2026-07-06T20:21:36.109107000 event_relation pid: 2 sm_id: 2 peid=None eid=0x200000000000000b |
+raft[3]: 2026-07-06T20:21:36.109183000 raft pid: 3 sm_id: 3 ae(o=1,d=3,t=2,ci=2,pli=2,e=[]) eid=0x300000000000000a |
+raft[3]: 2026-07-06T20:21:36.109196000 event_relation pid: 3 sm_id: 3 peid=0x100000000000001d eid=0x300000000000000a |
+raft[3]: 2026-07-06T20:21:36.109241000 event_relation pid: 3 sm_id: 3 peid=None eid=0x300000000000000b |

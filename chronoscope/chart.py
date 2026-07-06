@@ -91,9 +91,10 @@ def plot_arrows(arrows: list):
     for from_time, from_y, to_time, to_y in arrows:
         pt.annotate("",
                     xy=(to_time, to_y), xytext=(from_time, from_y),
-                    arrowprops=dict(arrowstyle="->", color="gray",
-                                    lw=0.4, alpha=0.5,
-                                    connectionstyle="arc3,rad=0.2"))
+                    arrowprops=dict(arrowstyle="-|>", color="navy",
+                                    lw=0.6, alpha=0.7,
+                                    shrinkA=2, shrinkB=2),
+                    zorder=10)
 
 class chart_annotation:
     def __init__(self, fig):
