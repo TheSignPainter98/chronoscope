@@ -42,7 +42,13 @@ class relation(p.Model):
         primary_key = p.CompositeKey("orig", "dest")
 
 
-TABLES = [tick, attr, relation]
+class event_relation(T):
+    peid = p.IntegerField(null=True)
+    eid = p.IntegerField()
+    type = p.TextField()
+
+
+TABLES = [tick, attr, relation, event_relation]
 VERBOSE = False
 
 def open(path: str, opts: None | dict[str, int | str] = None, create=False,
@@ -68,6 +74,7 @@ def mkidx():
     db.execute_sql("CREATE INDEX tick_idx on tick(id);")
     db.execute_sql("CREATE INDEX relation_idx on relation(orig,dest);")
     db.execute_sql("CREATE INDEX attr_idx on attr(id);")
+    db.execute_sql("CREATE INDEX event_relation_idx on event_relation(eid);")
 
 def line_nr(file: str) -> int:
     result = sp.run(['wc', file], stdout=sp.PIPE, text=True)

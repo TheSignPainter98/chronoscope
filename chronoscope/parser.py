@@ -17,7 +17,7 @@ class parser:
         # type -> (dest_table, parser_func)
         self.parsers: dict[str, tuple[str, Callable]] = {}
         # the parser knows about table names
-        self.tables = ["tick", "attr", "relation"]
+        self.tables = ["tick", "attr", "relation", "event_relation"]
         self.verbose = verbose
         self.load_config(conf_path)
 
@@ -41,6 +41,8 @@ class parser:
                 return self.make_rel_parser(**kwargs)
             case "attr":
                 return self.make_attr_parser(**kwargs)
+            case "event_relation":
+                return self.make_event_rel_parser(**kwargs)
         raise NotImplementedError()
 
     def make_req_parser(self, type: int, time: int, event: int,
@@ -71,6 +73,20 @@ class parser:
                 "val": line[value],
                 "name": line[name],
             } if type < len(line) and parse_type == line[type] else None
+        return parse
+
+    def make_event_rel_parser(self, peid: int, eid: int, type: int) -> Callable:
+        def parse(line: list[str], parse_type: str):
+            if type >= len(line) or parse_type != line[type]:
+                return None
+            raw_peid = line[peid].split("=", 1)[1]
+            parsed_peid = None if raw_peid == "None" else int(raw_peid, 16)
+            raw_eid = line[eid].split("=", 1)[1]
+            return {
+                "peid": parsed_peid,
+                "eid": int(raw_eid, 16),
+                "type": line[type],
+            }
         return parse
 
     def register_parser(self, dest_table: str, type: str, parse: Callable):
