@@ -139,9 +139,14 @@ def iterate(origin: int, parent: None | int,
     if depth_max < depth:
         return
 
-    # pull events of this state machine
-    timeline = event.select().where(event.state_machine_id == origin)
-    visit(list(timeline.dicts()), origin, parent)
+    # pull events of this state machine, enriched with sm_type
+    timeline = (event
+                .select(event, state_machine.type.alias("sm_type"))
+                .join(state_machine,
+                      on=(event.state_machine_id == state_machine.id))
+                .where(event.state_machine_id == origin)
+                .dicts())
+    visit(list(timeline), origin, parent)
 
     # pull children state machines
     orig_to_children = state_machine_relation.select().where(
