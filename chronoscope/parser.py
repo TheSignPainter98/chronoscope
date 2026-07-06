@@ -66,7 +66,7 @@ class parser:
         return parse
 
     def make_event_rel_parser(self, type: int, pid: int, sm_id: int,
-                              peid: int, eid: int) -> Callable:
+                              peid: int, eid: int, time: int) -> Callable:
         def parse(line: list[str], parse_type: str):
             if type >= len(line) or parse_type != line[type]:
                 return None
@@ -74,25 +74,18 @@ class parser:
             from_eid = None if raw_peid == "None" else int(raw_peid, 16)
             to_eid = int(line[eid].split("=", 1)[1], 16)
             sm = u.pack(int(line[sm_id]), int(line[pid]))
-            record = {
+            ts = u.ns(line[time])
+            return {
                 "event_relation": {
                     "from_event_id": from_eid,
                     "to_event_id": to_eid,
+                    "from_sm_id": sm if from_eid is not None else None,
+                    "from_time": ts if from_eid is not None else None,
+                    "to_sm_id": sm,
+                    "to_time": ts,
                     "relation": parse_type,
                 },
-                "state_machine": {"id": sm, "name": parse_type, "type": parse_type},
             }
-            # For send events (peid=None) the 'to' event is a send event
-            # that has no tick line, so we synthesize a minimal event
-            # record to anchor it in the event table.
-            if from_eid is None:
-                record["event"] = {
-                    "id": to_eid,
-                    "state_machine_id": sm,
-                    "time": u.ns(line[1]),
-                    "name": "send",
-                }
-            return record
         return parse
 
     def make_sm_rel_parser(self, type: int, time: int,
@@ -103,12 +96,7 @@ class parser:
                 return None
             from_sm = u.pack(int(line[orig_id]), int(line[orig_pid]))
             to_sm = u.pack(int(line[dest_id]), int(line[dest_pid]))
-            raw_eid = None
-            for token in line:
-                if token.startswith("eid="):
-                    raw_eid = int(token.split("=", 1)[1], 16)
-                    break
-            record = {
+            return {
                 "state_machine_relation": {
                     "from_sm_id": from_sm,
                     "to_sm_id": to_sm,
@@ -119,14 +107,6 @@ class parser:
                     {"id": to_sm, "name": "raft", "type": "raft"},
                 ],
             }
-            if raw_eid is not None:
-                record["event"] = {
-                    "id": raw_eid,
-                    "state_machine_id": to_sm,
-                    "time": u.ns(line[time]),
-                    "name": parse_type,
-                }
-            return record
         return parse
 
     def register_parser(self, dest_table: str, type: str, parse: Callable):

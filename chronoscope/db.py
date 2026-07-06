@@ -41,6 +41,10 @@ class event(p.Model):
 class event_relation(p.Model):
     from_event_id = p.IntegerField(null=True)
     to_event_id = p.IntegerField()
+    from_sm_id = p.IntegerField(null=True)
+    from_time = p.IntegerField(null=True)
+    to_sm_id = p.IntegerField()
+    to_time = p.IntegerField()
     relation = p.TextField()
 
     class Meta:

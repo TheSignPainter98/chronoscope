@@ -66,14 +66,19 @@ class timeline_visitor:
         self.y_pos += 1
 
     def collect_arrows(self):
-        """Query event_relation and resolve (from_sm, from_time) -> (to_sm, to_time)."""
+        """Query event_relation for (from_sm, from_time) -> (to_sm, to_time).
+
+        For each recv event_relation (from_event_id IS NOT NULL), the
+        sender's sm_id and time are looked up via the corresponding send
+        event_relation (where to_event_id = from_event_id and
+        from_event_id IS NULL)."""
         sql = """
-        SELECT ef.state_machine_id AS from_sm, ef.time AS from_time,
-               et.state_machine_id AS to_sm,   et.time AS to_time
-        FROM event_relation er
-        JOIN event ef ON ef.id = er.from_event_id
-        JOIN event et ON et.id = er.to_event_id
-        WHERE er.from_event_id IS NOT NULL
+        SELECT s.to_sm_id AS from_sm, s.to_time AS from_time,
+               r.to_sm_id AS to_sm,   r.to_time AS to_time
+        FROM event_relation r
+        JOIN event_relation s ON s.to_event_id = r.from_event_id
+                              AND s.from_event_id IS NULL
+        WHERE r.from_event_id IS NOT NULL
         """
         for from_sm, from_time, to_sm, to_time in db.db.execute_sql(sql).fetchall():
             if from_sm in self.sm_to_y and to_sm in self.sm_to_y:
@@ -87,7 +92,7 @@ def plot_arrows(arrows: list):
         pt.annotate("",
                     xy=(to_time, to_y), xytext=(from_time, from_y),
                     arrowprops=dict(arrowstyle="->", color="gray",
-                                    lw=0.5, alpha=0.6,
+                                    lw=0.4, alpha=0.5,
                                     connectionstyle="arc3,rad=0.2"))
 
 class chart_annotation:
