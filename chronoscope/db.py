@@ -16,40 +16,72 @@ import os
 
 db = p.SqliteDatabase(None)
 
-class T(p.Model):
-    class Meta:
-        database = db
-        primary_key = False
 
-class tick(T):
-    id = p.IntegerField()
-    time = p.IntegerField()
-    event = p.TextField()
-    type = p.TextField()
-
-class attr(T):
+class state_machine(p.Model):
     id = p.IntegerField()
     name = p.TextField()
-    val = p.TextField()
-
-class relation(p.Model):
-    orig = p.IntegerField()
-    dest = p.IntegerField()
-    type = p.TextField()
+    type = p.TextField(null=True)
 
     class Meta:
         database = db
-        primary_key = p.CompositeKey("orig", "dest")
+        primary_key = p.CompositeKey("id")
 
 
-class event_relation(T):
-    peid = p.IntegerField(null=True)
-    eid = p.IntegerField()
-    type = p.TextField()
+class event(p.Model):
+    id = p.IntegerField()
+    state_machine_id = p.IntegerField()
+    time = p.IntegerField()
+    name = p.TextField()
+
+    class Meta:
+        database = db
+        primary_key = p.CompositeKey("id")
 
 
-TABLES = [tick, attr, relation, event_relation]
+class event_relation(p.Model):
+    from_event_id = p.IntegerField(null=True)
+    to_event_id = p.IntegerField()
+    relation = p.TextField()
+
+    class Meta:
+        database = db
+        primary_key = p.CompositeKey("from_event_id", "to_event_id", "relation")
+
+
+class state_machine_relation(p.Model):
+    from_sm_id = p.IntegerField()
+    to_sm_id = p.IntegerField()
+    relation = p.TextField()
+
+    class Meta:
+        database = db
+        primary_key = p.CompositeKey("from_sm_id", "to_sm_id", "relation")
+
+
+class state_machine_attribute(p.Model):
+    state_machine_id = p.IntegerField()
+    key = p.TextField()
+    value = p.TextField()
+
+    class Meta:
+        database = db
+        primary_key = p.CompositeKey("state_machine_id", "key")
+
+
+class event_attribute(p.Model):
+    event_id = p.IntegerField()
+    key = p.TextField()
+    value = p.TextField()
+
+    class Meta:
+        database = db
+        primary_key = p.CompositeKey("event_id", "key")
+
+
+TABLES = [state_machine, event, event_relation,
+          state_machine_relation, state_machine_attribute, event_attribute]
 VERBOSE = False
+
 
 def open(path: str, opts: None | dict[str, int | str] = None, create=False,
          verbose=False):
@@ -67,18 +99,24 @@ def open(path: str, opts: None | dict[str, int | str] = None, create=False,
         with db:
             db.create_tables(TABLES)
 
+
 def close():
     db.close()
 
+
 def mkidx():
-    db.execute_sql("CREATE INDEX tick_idx on tick(id);")
-    db.execute_sql("CREATE INDEX relation_idx on relation(orig,dest);")
-    db.execute_sql("CREATE INDEX attr_idx on attr(id);")
-    db.execute_sql("CREATE INDEX event_relation_idx on event_relation(eid);")
+    db.execute_sql("CREATE INDEX event_sm_idx on event(state_machine_id);")
+    db.execute_sql("CREATE INDEX event_time_idx on event(time);")
+    db.execute_sql("CREATE INDEX event_relation_from_idx on event_relation(from_event_id);")
+    db.execute_sql("CREATE INDEX event_relation_to_idx on event_relation(to_event_id);")
+    db.execute_sql("CREATE INDEX sm_relation_from_idx on state_machine_relation(from_sm_id);")
+    db.execute_sql("CREATE INDEX sm_relation_to_idx on state_machine_relation(to_sm_id);")
+
 
 def line_nr(file: str) -> int:
     result = sp.run(['wc', file], stdout=sp.PIPE, text=True)
     return int(result.stdout.split()[0])
+
 
 def load(pr: pr.parser, trace_path: str, fd_chunk_size=900, db_chunk_size=100):
     if not os.path.exists(trace_path):
@@ -93,35 +131,42 @@ def load(pr: pr.parser, trace_path: str, fd_chunk_size=900, db_chunk_size=100):
                     for db_chunk in p.chunked(records[t_name], db_chunk_size):
                         table.insert_many(db_chunk).execute()
 
-def iterate(origin: int, parent: None | int, samples: type[tick] | type[attr],
+
+def iterate(origin: int, parent: None | int,
             visit: Callable, depth: int, depth_max: int):
     if depth_max < depth:
         return
 
-    # pull origin
-    if timeline := samples.select().where((samples.id == origin)):
-        visit(timeline.dicts(), origin, parent)
+    # pull events of this state machine
+    timeline = event.select().where(event.state_machine_id == origin)
+    visit(list(timeline.dicts()), origin, parent)
 
-    # pull children
-    orig_to_children = relation.select().where((relation.orig == origin))
+    # pull children state machines
+    orig_to_children = state_machine_relation.select().where(
+        state_machine_relation.from_sm_id == origin)
     for child in orig_to_children.dicts():
         if VERBOSE:
-            print(f"@[{depth}] {hex(child['orig'])} ... {hex(child['dest'])}")
-        iterate(child["dest"], origin, samples, visit, depth + 1, depth_max)
+            print(f"@[{depth}] {hex(child['from_sm_id'])} ... {hex(child['to_sm_id'])}")
+        iterate(child["to_sm_id"], origin, visit, depth + 1, depth_max)
 
-def spans(event_begin: str, event_end: str, tick_type: str) -> list:
+
+def spans(event_begin: str, event_end: str, sm_type: str) -> list:
     sql = f"""
-    SELECT (tk.time - tick.time) FROM tick JOIN tick tk ON tk.id=tick.id
-    WHERE tick.event="{event_begin}" AND tk.event="{event_end}"
-    AND tick.type="{tick_type}";
+    SELECT (e2.time - e1.time) FROM event e1
+    JOIN event e2 ON e2.state_machine_id = e1.state_machine_id
+    JOIN state_machine sm ON sm.id = e1.state_machine_id
+    WHERE e1.name="{event_begin}" AND e2.name="{event_end}"
+    AND sm.type="{sm_type}";
     """
     return db.execute_sql(sql).fetchall()
 
-def queues(event_begin: str, event_end: str, tick_type: str) -> list:
+
+def queues(event_begin: str, event_end: str, sm_type: str) -> list:
     sql = f"""
     SELECT (time/1000)*1000 as timer,
-    COUNT(CASE WHEN event = "{event_begin}" THEN 1 END) as cc1,
-    COUNT(CASE WHEN event = "{event_end}" THEN 1 END) as cc2
-    FROM tick WHERE type="{tick_type}" GROUP BY timer;
+    COUNT(CASE WHEN name = "{event_begin}" THEN 1 END) as cc1,
+    COUNT(CASE WHEN name = "{event_end}" THEN 1 END) as cc2
+    FROM event JOIN state_machine sm ON sm.id = event.state_machine_id
+    WHERE sm.type="{sm_type}" GROUP BY timer;
     """
     return db.execute_sql(sql).fetchall()
