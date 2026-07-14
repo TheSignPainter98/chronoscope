@@ -11,7 +11,7 @@ def test_parser_file_not_found():
 
 def test_parser_event():
     line = (
-        "raft[1]: 2026-07-06T19:44:22.172542000 raft pid: 1 sm_id: 1 "
+        "raft[1]: 2026-07-06T19:44:22.172542000 raft pid: 1 sm_id: 1152921504606846977 "
         "role=Follower term=1 log=0 ci=0 lc=0 eid=0x1000000000000001 |"
     )
     records = parser(RAFT_YAML).parse([line])
@@ -23,7 +23,7 @@ def test_parser_event():
 
 def test_parser_event_relation_send():
     line = (
-        "raft[1]: 2026-07-06T19:44:22.175353000 event_relation pid: 1 sm_id: 1 "
+        "raft[1]: 2026-07-06T19:44:22.175353000 event_relation pid: 1 sm_id: 1152921504606846977 "
         "peid=None eid=0x1000000000000006 |"
     )
     records = parser(RAFT_YAML).parse([line])
@@ -37,28 +37,42 @@ def test_parser_event_relation_send():
 
 def test_parser_event_relation_recv():
     line = (
-        "raft[3]: 2026-07-06T19:44:22.175565000 event_relation pid: 3 sm_id: 3 "
-        "peid=0x1000000000000007 eid=0x3000000000000004 |"
+        "raft[1]: 2026-07-06T19:44:22.175565000 event_relation pid: 1 sm_id: 1152921504606846981 "
+        "peid=0x1000000000000007 eid=0x100000000000000c |"
     )
     records = parser(RAFT_YAML).parse([line])
     assert len(records["event_relation"]) == 1
     er = records["event_relation"][0]
     assert er["from_event_id"] == 0x1000000000000007
-    assert er["to_event_id"] == 0x3000000000000004
+    assert er["to_event_id"] == 0x100000000000000c
     assert er["from_sm_id"] is not None
     assert er["to_sm_id"] is not None
 
 
 def test_parser_sm_relation():
     line = (
-        "raft[1]: 2025-06-07T11:00:14.026305714 top-to-raft opid: 1 dpid: 1 "
-        "id: 1111 id: 1 eid=0x1000000000000002 |"
+        "sm[1]: 2025-06-07T11:00:14.026305714 state_machine_relation "
+        "from_sm_id=0x1000000000000457 to_sm_id=0x1000000000000001 "
+        "relation=top-to-raft |"
     )
     records = parser(RAFT_YAML).parse([line])
     assert len(records["state_machine_relation"]) == 1
-    assert len(records["state_machine"]) == 2
+    assert len(records["state_machine"]) == 1
     smr = records["state_machine_relation"][0]
     assert smr["relation"] == "top-to-raft"
+
+
+def test_parser_state_machine():
+    line = (
+        "sm[1]: 2026-07-14T13:12:56.473265000 state_machine "
+        "sm_id=0x1000000000000018 name=DtxState state=Init "
+        "eid=0x1000000000000019 |"
+    )
+    records = parser(RAFT_YAML).parse([line])
+    assert len(records["state_machine"]) == 1
+    assert len(records["event"]) == 1
+    assert records["state_machine"][0]["type"] == "DtxState"
+    assert records["event"][0]["name"] == "Init"
 
 
 def test_parser_malformed():

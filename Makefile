@@ -3,7 +3,7 @@ SHELL:=/bin/bash
 .PHONY: test
 test: clean
 	./system-test mkdb
-	diff -u <(printf "4\n30\n34\n3\n") <(echo "select count(*) from state_machine;" \
+	diff -u <(printf "6\n38\n34\n5\n") <(echo "select count(*) from state_machine;" \
 	" select count(*) from event;" \
 	" select count(*) from event_relation;" \
 	" select count(*) from state_machine_relation;" | \

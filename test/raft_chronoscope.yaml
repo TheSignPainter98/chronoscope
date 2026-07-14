@@ -13,13 +13,22 @@
   eid: 8
   time: 1
 
-.p3: &sm_rel_parser_positions
+.p3: &state_machine_parser_positions
   type: 2
   time: 1
-  orig_pid: 4
-  dest_pid: 6
-  orig_id: 8
-  dest_id: 10
+  sm_id: 3
+  name: 4
+  state: 5
+
+.p4: &sm_rel_parser_positions
+  type: 2
+  from_sm_id: 3
+  to_sm_id: 4
+  relation: 5
+
+state_machine:
+  - type: state_machine
+    pos: *state_machine_parser_positions
 
 event:
   - type: raft
@@ -30,5 +39,5 @@ event_relation:
     pos: *event_rel_parser_positions
 
 state_machine_relation:
-  - type: top-to-raft
+  - type: state_machine_relation
     pos: *sm_rel_parser_positions

@@ -37,6 +37,8 @@ class parser:
 
     def make_parser(self, table: str, kwargs: dict[str, int]) -> Callable:
         match table:
+            case "state_machine":
+                return self.make_state_machine_parser(**kwargs)
             case "event":
                 return self.make_event_parser(**kwargs)
             case "event_relation":
@@ -57,7 +59,7 @@ class parser:
                     break
             if eid is None:
                 return None
-            sm = u.pack(int(line[sm_id]), int(line[pid]))
+            sm = int(line[sm_id], 0)
             return {
                 "state_machine": {"id": sm, "name": parse_type, "type": parse_type},
                 "event": {"id": eid, "state_machine_id": sm,
@@ -73,7 +75,7 @@ class parser:
             raw_peid = line[peid].split("=", 1)[1]
             from_eid = None if raw_peid == "None" else int(raw_peid, 16)
             to_eid = int(line[eid].split("=", 1)[1], 16)
-            sm = u.pack(int(line[sm_id]), int(line[pid]))
+            sm = int(line[sm_id], 0)
             ts = u.ns(line[time])
             return {
                 "event_relation": {
@@ -88,25 +90,47 @@ class parser:
             }
         return parse
 
-    def make_sm_rel_parser(self, type: int, time: int,
-                           orig_pid: int, dest_pid: int,
-                           orig_id: int, dest_id: int) -> Callable:
+    def make_state_machine_parser(self, type: int, time: int,
+                                  sm_id: int, name: int, state: int) -> Callable:
         def parse(line: list[str], parse_type: str):
             if type >= len(line) or parse_type != line[type]:
                 return None
-            from_sm = u.pack(int(line[orig_id]), int(line[orig_pid]))
-            to_sm = u.pack(int(line[dest_id]), int(line[dest_pid]))
+            sm = int(line[sm_id].split("=", 1)[1], 0)
+            raw_name = line[name].split("=", 1)[1]
+            raw_state = line[state].split("=", 1)[1]
+            eid = None
+            for token in line:
+                if token.startswith("eid="):
+                    eid = int(token.split("=", 1)[1], 16)
+                    break
+            if eid is None:
+                return None
             return {
+                "state_machine": {"id": sm, "name": raw_name, "type": raw_name},
+                "event": {"id": eid, "state_machine_id": sm,
+                          "time": u.ns(line[time]), "name": raw_state},
+            }
+        return parse
+
+    def make_sm_rel_parser(self, type: int,
+                           from_sm_id: int, to_sm_id: int,
+                           relation: int) -> Callable:
+        def parse(line: list[str], parse_type: str):
+            if type >= len(line) or parse_type != line[type]:
+                return None
+            from_sm = int(line[from_sm_id].split("=", 1)[1], 0)
+            to_sm = int(line[to_sm_id].split("=", 1)[1], 0)
+            rel = line[relation].split("=", 1)[1]
+            record = {
                 "state_machine_relation": {
                     "from_sm_id": from_sm,
                     "to_sm_id": to_sm,
-                    "relation": parse_type,
-                },
-                "state_machine": [
-                    {"id": from_sm, "name": "top", "type": "top"},
-                    {"id": to_sm, "name": "raft", "type": "raft"},
-                ],
+                    "relation": rel,
+                }
             }
+            if rel == "top-to-raft":
+                record["state_machine"] = {"id": from_sm, "name": "top", "type": "top"}
+            return record
         return parse
 
     def register_parser(self, dest_table: str, type: str, parse: Callable):
