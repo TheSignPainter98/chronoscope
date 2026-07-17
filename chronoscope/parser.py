@@ -48,7 +48,7 @@ class parser:
         raise NotImplementedError()
 
     def make_event_parser(self, type: int, time: int, event: int,
-                          pid: int, sm_id: int) -> Callable:
+                           sm_id: int) -> Callable:
         def parse(line: list[str], parse_type: str):
             if type >= len(line) or parse_type != line[type]:
                 return None
@@ -67,7 +67,7 @@ class parser:
             }
         return parse
 
-    def make_event_rel_parser(self, type: int, pid: int, sm_id: int,
+    def make_event_rel_parser(self, type: int, sm_id: int,
                               peid: int, eid: int, time: int) -> Callable:
         def parse(line: list[str], parse_type: str):
             if type >= len(line) or parse_type != line[type]:

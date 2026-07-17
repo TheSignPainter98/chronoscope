@@ -11,8 +11,8 @@ def test_parser_file_not_found():
 
 def test_parser_event():
     line = (
-        "raft[1]: 2026-07-06T19:44:22.172542000 raft pid: 1 sm_id: 1152921504606846977 "
-        "role=Follower term=1 log=0 ci=0 lc=0 eid=0x1000000000000001 |"
+        "raft[1]: 2026-07-06T19:44:22.172542000 raft sm_id: 0x1000000000000001 "
+        "eid=0x1000000000000001 role=Follower term=1 log=0 ci=0 lc=0 |"
     )
     records = parser(RAFT_YAML).parse([line])
     assert len(records["event"]) == 1
@@ -23,8 +23,8 @@ def test_parser_event():
 
 def test_parser_event_relation_send():
     line = (
-        "raft[1]: 2026-07-06T19:44:22.175353000 event_relation pid: 1 sm_id: 1152921504606846977 "
-        "peid=None eid=0x1000000000000006 |"
+        "raft[1]: 2026-07-06T19:44:22.175353000 event_relation sm_id: 0x1000000000000001 "
+        "eid=0x1000000000000006 peid=None |"
     )
     records = parser(RAFT_YAML).parse([line])
     assert len(records["event_relation"]) == 1
@@ -37,8 +37,8 @@ def test_parser_event_relation_send():
 
 def test_parser_event_relation_recv():
     line = (
-        "raft[1]: 2026-07-06T19:44:22.175565000 event_relation pid: 1 sm_id: 1152921504606846981 "
-        "peid=0x1000000000000007 eid=0x100000000000000c |"
+        "raft[1]: 2026-07-06T19:44:22.175565000 event_relation sm_id: 0x1000000000000005 "
+        "eid=0x100000000000000c peid=0x1000000000000007 |"
     )
     records = parser(RAFT_YAML).parse([line])
     assert len(records["event_relation"]) == 1
