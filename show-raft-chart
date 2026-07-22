@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: $0 DATABASE" >&2
+    exit 2
+fi
+
+database=$1
+if [[ $database != /* ]]; then
+    database="$(pwd)/$database"
+fi
+
+if [[ ! -f $database ]]; then
+    echo "Database does not exist: $database" >&2
+    exit 1
+fi
+
+if ! command -v sqlite3 >/dev/null; then
+    echo "sqlite3 is required" >&2
+    exit 1
+fi
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+python=${CHRONOSCOPE_PYTHON:-"$script_dir/.venv/bin/python"}
+if ! command -v "$python" >/dev/null; then
+    echo "Chronoscope Python interpreter does not exist: $python" >&2
+    exit 1
+fi
+
+raft_count=$(sqlite3 "$database" \
+    "SELECT COUNT(*) FROM state_machine WHERE type = 'raft';")
+if [[ $raft_count -eq 0 ]]; then
+    echo "Database contains no Raft state machines: $database" >&2
+    exit 1
+fi
+
+top_sm_id=$(sqlite3 "$database" <<'SQL'
+BEGIN IMMEDIATE;
+DELETE FROM state_machine_relation WHERE relation = 'top-to-raft';
+DELETE FROM state_machine WHERE type = 'top';
+
+INSERT INTO state_machine (id, name, type)
+SELECT COALESCE(MIN(id), 0) - 1, 'top', 'top'
+FROM state_machine;
+
+INSERT INTO state_machine_relation (from_sm_id, to_sm_id, relation)
+SELECT top.id, raft.id, 'top-to-raft'
+FROM state_machine AS top
+CROSS JOIN state_machine AS raft
+WHERE top.type = 'top' AND raft.type = 'raft';
+
+SELECT id FROM state_machine WHERE type = 'top';
+COMMIT;
+SQL
+)
+
+echo "Created top state machine $top_sm_id with $raft_count Raft children"
+
+cd "$script_dir"
+exec env MPLCONFIGDIR="${MPLCONFIGDIR:-/tmp/matplotlib}" \
+    "$python" -m chronoscope -d "$database" chart -v -k "$top_sm_id"
