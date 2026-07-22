@@ -24,6 +24,11 @@
   to_sm_id: 4
   relation: 5
 
+.p5: &event_attribute_parser_positions
+  type: 2
+  eid: 3
+  attribute: 4
+
 state_machine:
   - type: state_machine
     pos: *state_machine_parser_positions
@@ -35,6 +40,10 @@ event:
 event_relation:
   - type: event_relation
     pos: *event_rel_parser_positions
+
+event_attribute:
+  - type: event_attribute
+    pos: *event_attribute_parser_positions
 
 state_machine_relation:
   - type: state_machine_relation

@@ -49,6 +49,19 @@ def test_parser_event_relation_recv():
     assert er["to_sm_id"] is not None
 
 
+def test_parser_event_attribute():
+    line = (
+        "raft[1]: 2026-07-22T08:28:19.113535000 event_attribute "
+        "eid=0x100000000000000c raft:role=Follower |"
+    )
+    records = parser(RAFT_YAML).parse([line])
+    assert len(records["event_attribute"]) == 1
+    attribute = records["event_attribute"][0]
+    assert attribute["event_id"] == 0x100000000000000C
+    assert attribute["key"] == "raft:role"
+    assert attribute["value"] == "Follower"
+
+
 def test_parser_sm_relation():
     line = (
         "sm[1]: 2025-06-07T11:00:14.026305714 state_machine_relation "

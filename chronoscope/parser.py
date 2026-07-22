@@ -19,7 +19,7 @@ class parser:
         self.parsers: dict[str, tuple[str, Callable]] = {}
         # the parser knows about table names
         self.tables = ["state_machine", "event", "event_relation",
-                       "state_machine_relation"]
+                       "state_machine_relation", "event_attribute"]
         self.verbose = verbose
         self.load_config(conf_path)
 
@@ -45,6 +45,8 @@ class parser:
                 return self.make_event_rel_parser(**kwargs)
             case "state_machine_relation":
                 return self.make_sm_rel_parser(**kwargs)
+            case "event_attribute":
+                return self.make_event_attribute_parser(**kwargs)
         raise NotImplementedError()
 
     def make_event_parser(self, type: int, time: int, event: int,
@@ -131,6 +133,22 @@ class parser:
             if rel == "top-to-raft":
                 record["state_machine"] = {"id": from_sm, "name": "top", "type": "top"}
             return record
+        return parse
+
+    def make_event_attribute_parser(self, type: int,
+                                    eid: int, attribute: int) -> Callable:
+        def parse(line: list[str], parse_type: str):
+            if type >= len(line) or parse_type != line[type]:
+                return None
+            event_id = int(line[eid].split("=", 1)[1], 16)
+            key, value = line[attribute].split("=", 1)
+            return {
+                "event_attribute": {
+                    "event_id": event_id,
+                    "key": key,
+                    "value": value,
+                },
+            }
         return parse
 
     def register_parser(self, dest_table: str, type: str, parse: Callable):
