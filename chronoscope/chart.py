@@ -134,14 +134,14 @@ class chart_annotation:
         self.ann_mode = not self.ann_mode
         event.canvas.draw()
 
-def plot(origin: int, figsize=(16, 4), depth_max=50):
+def plot(origin: int, figsize=(16, 4), depth_max=50, reverse=False):
     fig = pt.figure(figsize=figsize)
     pt.style.use("bmh")
     pt.rcParams["font.size"] = 8
     pt.subplots_adjust(top=0.75)
 
     v = timeline_visitor([], 0, utils.MAX_INT, utils.MIN_INT)
-    db.iterate(origin, None, v, 0, depth_max)
+    db.iterate(origin, None, v, 0, depth_max, reverse)
     v.collect_arrows()
 
     end = -Y_LINE_SPACING * v.y_pos

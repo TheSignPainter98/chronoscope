@@ -139,7 +139,7 @@ def load(pr: pr.parser, trace_path: str, fd_chunk_size=900, db_chunk_size=100):
 
 
 def iterate(origin: int, parent: None | int,
-            visit: Callable, depth: int, depth_max: int):
+            visit: Callable, depth: int, depth_max: int, reverse=False):
     if depth_max < depth:
         return
 
@@ -152,13 +152,17 @@ def iterate(origin: int, parent: None | int,
                 .dicts())
     visit(list(timeline), origin, parent)
 
-    # pull children state machines
-    orig_to_children = state_machine_relation.select().where(
-        state_machine_relation.from_sm_id == origin)
-    for child in orig_to_children.dicts():
+    relation_column = (state_machine_relation.to_sm_id if reverse
+                       else state_machine_relation.from_sm_id)
+    related_column = (state_machine_relation.from_sm_id if reverse
+                      else state_machine_relation.to_sm_id)
+    relations = state_machine_relation.select().where(
+        relation_column == origin)
+    for relation in relations.dicts():
+        related = relation[related_column.name]
         if VERBOSE:
-            print(f"@[{depth}] {hex(child['from_sm_id'])} ... {hex(child['to_sm_id'])}")
-        iterate(child["to_sm_id"], origin, visit, depth + 1, depth_max)
+            print(f"@[{depth}] {hex(origin)} ... {hex(related)}")
+        iterate(related, origin, visit, depth + 1, depth_max, reverse)
 
 
 def spans(event_begin: str, event_end: str, sm_type: str) -> list:

@@ -47,6 +47,8 @@ def parse_args():
     parser.add_argument("-t", "--trace", type=str, help="User's traces")
     parser.add_argument("-D", "--depth", type=int, default=50,
                         help="limits output to given level of ticks")
+    parser.add_argument("-r", "--reverse", action='store_true',
+                        help="follow state-machine relations to parents")
     parser.add_argument("command", type=str,
                         choices=["create", "chart", "tree",
                                  "hist", "queue", "vcd"],
@@ -73,7 +75,8 @@ def main() -> int:
                 db.close()
             case "chart":
                 db.open(args.db, db_options, verbose=args.verbose)
-                chart.plot(args.tick_id, args.fig_size, args.depth)
+                chart.plot(args.tick_id, args.fig_size, args.depth,
+                           args.reverse)
             case "tree":
                 db.open(args.db, db_options, verbose=args.verbose)
                 tree.plot(args.tick_id, args.depth)
