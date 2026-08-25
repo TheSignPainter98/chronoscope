@@ -117,9 +117,18 @@ class json_parser:
                 continue
             try:
                 obj = json.loads(line)
-                ((table, rec),) = obj.items()
-                if table not in self.tables:
-                    raise SyntaxError(f"unknown table {table!r}")
+            except Exception:
+                # not JSON: no discriminator to read, skip silently like
+                # text lines whose type token matches no parser
+                continue
+            # a record line carries exactly one discriminator key;
+            # anything else isn't ours
+            if not isinstance(obj, dict) or len(obj) != 1:
+                continue
+            (table, rec), = obj.items()
+            if table not in self.tables:
+                continue
+            try:
                 records[table].append(self.make_record(table, rec))
             except Exception as e:
                 if self.verbose:
@@ -132,8 +141,12 @@ class json_parser:
         match table:
             case "tick":
                 time = rec["time"]
+                if isinstance(time, str):
+                    time = u.ns(time)
+                elif type(time) is not int:
+                    raise ValueError(f"invalid time: {time!r}")
                 return {
-                    "time": u.ns(time) if isinstance(time, str) else time,
+                    "time": time,
                     "type": rec["type"], "event": rec["event"],
                     "id": u.pack(rec["id"], rec["pid"]),
                 }

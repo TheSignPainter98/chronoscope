@@ -26,3 +26,10 @@ a b c d
 def test_parser_empty():
     line = ""
     _ = text_parser("test/chronoscope.yaml").parse([line])
+
+def test_parser_noise_silent_even_in_verbose(capsys):
+    noise = ["", "   ", "a b c d", "libuv[3433]: conn"]
+    records = text_parser("test/chronoscope.yaml",
+                          verbose=True).parse(noise)
+    assert all(not v for v in records.values())
+    assert capsys.readouterr().err == ""
