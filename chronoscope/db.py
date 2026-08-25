@@ -73,13 +73,14 @@ def line_nr(file: str) -> int:
     result = sp.run(['wc', file], stdout=sp.PIPE, text=True)
     return int(result.stdout.split()[0])
 
-def load(pr: pr.parser, trace_path: str, fd_chunk_size=900, db_chunk_size=100):
+def load(trace_parser: pr.record_parser, trace_path: str,
+         fd_chunk_size=900, db_chunk_size=100):
     if not os.path.exists(trace_path):
-        raise FileNotFoundError("`{trace_path}' not found!")
+        raise FileNotFoundError(f"`{trace_path}' not found!")
 
     with b.open(trace_path) as fd:
         for fd_chunk in p.chunked(fd, fd_chunk_size):
-            records = pr.parse(fd_chunk)
+            records = trace_parser.parse(fd_chunk)
             with db.atomic():
                 for table in TABLES:
                     t_name: str = table._meta.name  # type: ignore

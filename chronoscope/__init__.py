@@ -42,8 +42,12 @@ def parse_args():
     parser.add_argument("-d", "--db", type=str, default="chronoscope.db",
                         help="chronoscope database")
     parser.add_argument("-c", "--conf", type=str, default="chronoscope.yaml",
-                        help="configuration, defines how to parse out users'\n"
+                        help="configuration for the text input format,\n"
+                        "defines how to parse out users'\n"
                         "ticks, attrs and relations from the traces")
+    parser.add_argument("-i", "--input-format", type=str, default="text",
+                        choices=["text", "json"],
+                        help="trace input format; json needs no --conf")
     parser.add_argument("-t", "--trace", type=str, help="User's traces")
     parser.add_argument("-D", "--depth", type=int, default=50,
                         help="limits output to given level of ticks")
@@ -62,13 +66,20 @@ def parse_args():
     return parser.parse_args()
 
 
+def make_parser(args: arg.Namespace) -> parser.record_parser:
+    match args.input_format:
+        case "json":
+            return parser.json_parser(args.verbose)
+        case _:
+            return parser.text_parser(args.conf, args.verbose)
+
 def main() -> int:
     try:
         args = parse_args()
         match args.command:
             case "create":
                 db.open(args.db, db_options, create=True, verbose=args.verbose)
-                db.load(parser.parser(args.conf, args.verbose), args.trace)
+                db.load(make_parser(args), args.trace)
                 db.mkidx()
                 db.close()
             case "chart":

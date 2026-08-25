@@ -8,11 +8,17 @@
 #
 
 import chronoscope.utils as u
-from typing import Callable
+from typing import Any, Callable, Protocol
 import yaml
+import json
 import sys
 
-class parser:
+class record_parser(Protocol):
+    tables: list[str]
+
+    def parse(self, fd_chunk: list[str]) -> dict[str, list[dict[str, str | int]]]: ...
+
+class text_parser:
     def __init__(self, conf_path: str, verbose=False):
         # type -> (dest_table, parser_func)
         self.parsers: dict[str, tuple[str, Callable]] = {}
@@ -88,3 +94,58 @@ class parser:
                     if self.verbose:
                         print(f"{e}: {line=}", file=sys.stderr)
         return records
+
+class json_parser:
+    """Parses JSON-lines traces: one record per line, no config needed.
+
+    Each line is a single-key object naming the destination table:
+      {"tick": {"time": <ns>, "type": str, "event": str, "id": int, "pid": int}}
+      {"relation": {"orig": {"id", "pid"}, "dest": {"id", "pid"}, "type": str}}
+      {"attr": {"id": int, "pid": int, "name": str, "val": str}}
+    """
+
+    def __init__(self, verbose=False):
+        self.tables = ["tick", "attr", "relation"]
+        self.verbose = verbose
+
+    def parse(self,
+              fd_chunk: list[str]) -> dict[str, list[dict[str, str | int]]]:
+        records: dict[str, list] = {t: [] for t in self.tables}
+        for line in fd_chunk:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+                ((table, rec),) = obj.items()
+                if table not in self.tables:
+                    raise SyntaxError(f"unknown table {table!r}")
+                records[table].append(self.make_record(table, rec))
+            except Exception as e:
+                if self.verbose:
+                    print(f"{e}: {line=}", file=sys.stderr)
+        return records
+
+    @staticmethod
+    def make_record(table: str,
+                    rec: dict[str, Any]) -> dict[str, str | int]:
+        match table:
+            case "tick":
+                time = rec["time"]
+                return {
+                    "time": u.ns(time) if isinstance(time, str) else time,
+                    "type": rec["type"], "event": rec["event"],
+                    "id": u.pack(rec["id"], rec["pid"]),
+                }
+            case "relation":
+                return {
+                    "orig": u.pack(rec["orig"]["id"], rec["orig"]["pid"]),
+                    "dest": u.pack(rec["dest"]["id"], rec["dest"]["pid"]),
+                    "type": rec["type"],
+                }
+            case "attr":
+                return {
+                    "id": u.pack(rec["id"], rec["pid"]),
+                    "name": rec["name"], "val": rec["val"],
+                }
+        raise NotImplementedError()
