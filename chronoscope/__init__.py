@@ -70,8 +70,10 @@ def make_parser(args: arg.Namespace) -> parser.record_parser:
     match args.input_format:
         case "json":
             return parser.json_parser(args.verbose)
-        case _:
+        case "text":
             return parser.text_parser(args.conf, args.verbose)
+        case _:
+            raise ValueError(f"Unsupported input format: {args.input_format}")
 
 def main() -> int:
     try:
