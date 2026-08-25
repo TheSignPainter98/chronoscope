@@ -118,11 +118,8 @@ class json_parser:
             try:
                 obj = json.loads(line)
             except Exception:
-                # not JSON: no discriminator to read, skip silently like
-                # text lines whose type token matches no parser
+                # Ignore malformed JSON.
                 continue
-            # a record line carries exactly one discriminator key;
-            # anything else isn't ours
             if not isinstance(obj, dict) or len(obj) != 1:
                 continue
             (table, rec), = obj.items()
