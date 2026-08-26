@@ -10,3 +10,9 @@
 {"timestamp":"2055-11-29T20:57:56.489744008","kind":"attr","id":3,"pid":111,"type":"req-attr","name":"queue","value":"orders","tags":["priority","durable"]}
 {"timestamp":"2055-11-29T20:57:56.489800125","kind":"tick","id":3,"pid":111,"type":"req","event":"job_completed","details":{"duration_ms":4.8,"success":true,"error":null}}
 {"timestamp":"2055-11-29T20:57:56.489855900","kind":"tick","id":2,"pid":111,"type":"gw","event":"response_sent","response":{"status_code":201,"duration_ms":6.2}}
+everything at and after this point is malformed json
+{"timestamp":"2055-11-29T20:57:56.489900000","kind":"bogus","id":4,"pid":111}
+{"timestamp":"2055-11-29T20:57:56.489910000","kind":"tick","id":4,"pid":111,"type":"gw"}
+{"timestamp":"malformed","kind":"attr","id":4,"pid":111,"type":"gw-attr","name":"n","value":"v"}
+{"timestamp":"2055-11-29T20:57:56.489920000"}
+[1, 2, 3]

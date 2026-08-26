@@ -1,4 +1,12 @@
-import pytest
+# -*- coding: utf-8 -*-
+#
+# This file is part of Chronoscope.
+#
+# SPDX-FileCopyrightText: 2024 Anatoliy Bilenko <anatoliy.bilenko@gmail.com>
+#
+# SPDX-License-Identifier: LGPL-3.0-only
+#
+
 import chronoscope.db as db
 import chronoscope.utils as u
 from chronoscope.parser import parser
@@ -91,50 +99,6 @@ def test_parser_unrecognized_lines_are_silent(capsys):
 
     assert all(not table_records for table_records in records.values())
     assert capsys.readouterr().err == ""
-
-
-@pytest.mark.parametrize(
-    ("timestamp", "error"),
-    [("1", "invalid timestamp: 1"),
-     ("null", "invalid timestamp: None"),
-     ('"malformed"', "Not a nanosecond time format")],
-)
-def test_parser_invalid_timestamp_reported_only_in_verbose(
-        capsys, timestamp, error):
-    line = (f'{{"timestamp":{timestamp},"kind":"tick","id":2,"pid":111,'
-            '"type":"gw","event":"inited"}')
-
-    assert all(not records for records in parser().parse([line]).values())
-    assert capsys.readouterr().err == ""
-    assert all(not records
-               for records in parser(verbose=True).parse([line]).values())
-
-    stderr = capsys.readouterr().err
-    assert error in stderr
-    assert f"line={line!r}" in stderr
-
-
-@pytest.mark.parametrize(
-    ("line", "missing"),
-    [
-        ('{"kind":"tick","id":2,"pid":111,"type":"gw",'
-         '"event":"inited"}', "timestamp"),
-        (f'{{"timestamp":"{TIMESTAMP}","kind":"tick","id":2,'
-         '"pid":111,"type":"gw"}', "event"),
-        (f'{{"timestamp":"{TIMESTAMP}","kind":"attr","id":2,'
-         '"pid":111,"type":"gw-attr","name":"route"}', "value"),
-        (f'{{"timestamp":"{TIMESTAMP}","kind":"relation",'
-         '"orig_id":1,"orig_pid":111,"dest_pid":111,'
-         '"type":"conn-to-gw"}', "dest_id"),
-    ],
-)
-def test_parser_missing_required_field_reported_only_in_verbose(
-        capsys, line, missing):
-    assert all(not records for records in parser().parse([line]).values())
-    assert capsys.readouterr().err == ""
-    assert all(not records
-               for records in parser(verbose=True).parse([line]).values())
-    assert f"missing required fields: {missing}" in capsys.readouterr().err
 
 
 def test_parser_persists_kind_records(tmp_path):

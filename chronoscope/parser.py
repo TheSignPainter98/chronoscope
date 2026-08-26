@@ -29,9 +29,6 @@ class parser:
     def parse(self, fd_chunk: list[str]) -> dict[str, list[dict[str, Any]]]:
         records: dict[str, list] = {t: [] for t in self.tables}
         for line in fd_chunk:
-            line = line.strip()
-            if not line:
-                continue
             try:
                 rec = json.loads(line)
                 kind = rec["kind"]
@@ -45,7 +42,7 @@ class parser:
                     fields = ", ".join(sorted(missing))
                     raise ValueError(f"missing required fields: {fields}")
 
-                timestamp = self.make_timestamp(rec["timestamp"])
+                timestamp = u.ns(rec["timestamp"])
                 match kind:
                     case "tick":
                         rec["id"] = u.pack(rec["id"], rec["pid"])
@@ -60,11 +57,5 @@ class parser:
                 records[kind].append(rec)
             except Exception as e:
                 if self.verbose:
-                    print(f"{e}: {line=}", file=sys.stderr)
+                    print(f"{e}: line={line.strip()!r}", file=sys.stderr)
         return records
-
-    @staticmethod
-    def make_timestamp(timestamp: Any) -> int:
-        if not isinstance(timestamp, str):
-            raise ValueError(f"invalid timestamp: {timestamp!r}")
-        return u.ns(timestamp)

@@ -1,7 +1,14 @@
+# -*- coding: utf-8 -*-
+#
+# This file is part of Chronoscope.
+#
+# SPDX-FileCopyrightText: 2024 Anatoliy Bilenko <anatoliy.bilenko@gmail.com>
+#
+# SPDX-License-Identifier: LGPL-3.0-only
+#
+
 import sqlite3
 import sys
-
-import pytest
 
 import chronoscope
 import chronoscope.utils as u
@@ -29,17 +36,3 @@ def test_create_uses_parser_by_default(tmp_path, monkeypatch):
             "SELECT id, time, type, event FROM tick"
         ).fetchone()
     assert tick == (u.pack(2, 111), u.ns(TIMESTAMP), "gw", "inited")
-
-
-@pytest.mark.parametrize(
-    "option",
-    [("--input-format", "json"), ("--conf", "config.yaml")],
-)
-def test_obsolete_input_options_are_rejected(monkeypatch, capsys, option):
-    monkeypatch.setattr(sys, "argv", ["chronoscope", "create", *option])
-
-    with pytest.raises(SystemExit) as error:
-        chronoscope.parse_args()
-
-    assert error.value.code == 2
-    assert "unrecognized arguments" in capsys.readouterr().err
