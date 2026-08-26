@@ -10,7 +10,7 @@ import chronoscope.utils as u
 TIMESTAMP = "2055-11-29T20:57:56.489282133"
 
 
-def test_create_uses_json_parser_by_default(tmp_path, monkeypatch):
+def test_create_uses_parser_by_default(tmp_path, monkeypatch):
     payload = (f'{{"timestamp":"{TIMESTAMP}","kind":"tick",'
                '"id":2,"pid":111,"type":"gw","event":"inited"}')
     trace_path = tmp_path / "events.jsonl"

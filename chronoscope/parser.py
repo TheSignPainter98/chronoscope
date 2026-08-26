@@ -21,7 +21,7 @@ class record_parser(Protocol):
         ...
 
 
-class json_parser:
+class parser:
     """Parses JSON Lines into raw and kind-specific records.
 
     Each object must contain a top-level ``timestamp`` string and a ``kind``

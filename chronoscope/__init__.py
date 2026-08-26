@@ -65,7 +65,7 @@ def main() -> int:
         match args.command:
             case "create":
                 db.open(args.db, db_options, create=True, verbose=args.verbose)
-                db.load(parser.json_parser(args.verbose), args.trace)
+                db.load(parser.parser(args.verbose), args.trace)
                 db.mkidx()
                 db.close()
             case "chart":
