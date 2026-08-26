@@ -14,12 +14,6 @@ import sys
 
 
 class parser:
-    """Parses JSON Lines into kind-specific records.
-
-    Each object must contain a top-level ``timestamp`` string and a ``kind``
-    of ``tick``, ``attr``, or ``relation``. Extra fields stay on the parsed
-    kind record.
-    """
 
     required_fields = {
         "tick": {"timestamp", "kind", "id", "pid", "type", "event"},
