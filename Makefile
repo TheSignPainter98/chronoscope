@@ -3,9 +3,10 @@ SHELL:=/bin/bash
 .PHONY: test
 test: clean
 	./system-test mkdb
-	diff -u <(printf "629\n62\n629\n") <(echo "select count(*) from tick;" \
+	diff -u <(printf "7\n2\n3\n12\n") <(echo "select count(*) from tick;" \
 	" select count(*) from relation;" \
-	" select count(*) from attr;" | \
+	" select count(*) from attr;" \
+	" select count(*) from json_event;" | \
 	sqlite3 test/chronoscope.db)
 
 

@@ -41,8 +41,12 @@ class relation(p.Model):
         database = db
         primary_key = p.CompositeKey("orig", "dest")
 
+class json_event(T):
+    timestamp = p.IntegerField()
+    payload = p.TextField()
 
-TABLES = [tick, attr, relation]
+
+TABLES = [tick, attr, relation, json_event]
 VERBOSE = False
 
 def open(path: str, opts: None | dict[str, int | str] = None, create=False,
@@ -68,6 +72,7 @@ def mkidx():
     db.execute_sql("CREATE INDEX tick_idx on tick(id);")
     db.execute_sql("CREATE INDEX relation_idx on relation(orig,dest);")
     db.execute_sql("CREATE INDEX attr_idx on attr(id);")
+    db.execute_sql("CREATE INDEX json_event_idx on json_event(timestamp);")
 
 def line_nr(file: str) -> int:
     result = sp.run(['wc', file], stdout=sp.PIPE, text=True)
@@ -84,8 +89,11 @@ def load(trace_parser: pr.record_parser, trace_path: str,
             with db.atomic():
                 for table in TABLES:
                     t_name: str = table._meta.name  # type: ignore
-                    for db_chunk in p.chunked(records[t_name], db_chunk_size):
-                        table.insert_many(db_chunk).execute()
+                    fields = tuple(table._meta.sorted_fields)
+                    table_records = records.get(t_name, [])
+                    chunks = p.chunked(table_records, db_chunk_size)
+                    for db_chunk in chunks:
+                        table.insert_many(db_chunk, fields=fields).execute()
 
 def iterate(origin: int, parent: None | int, samples: type[tick] | type[attr],
             visit: Callable, depth: int, depth_max: int):
