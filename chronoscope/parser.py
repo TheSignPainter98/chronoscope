@@ -34,12 +34,10 @@ class parser:
                 continue
             try:
                 rec = json.loads(line)
+                kind = rec["kind"]
             except Exception:
                 continue
-            if not isinstance(rec, dict):
-                continue
-            kind = rec.get("kind")
-            if not isinstance(kind, str) or kind not in self.required_fields:
+            if kind not in records:
                 continue
             try:
                 missing = self.required_fields[kind].difference(rec)
