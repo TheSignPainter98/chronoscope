@@ -125,7 +125,7 @@ class chart_annotation:
         cursor = chr(self.cur_mark)
         if self.cur_mark % 2 == 0:
             cursor = chr(self.cur_mark - 1) + cursor + ": "
-            cursor += utils.str_ns_diff(int(abs(self.cur[-1] - self.cur[-2])))
+            cursor += utils.str_us_diff(int(abs(self.cur[-1] - self.cur[-2])))
         self.cur_mark += 1
 
         self.ann.append(ax.axvline(x=x, color="lightgray"))

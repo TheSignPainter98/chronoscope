@@ -47,5 +47,5 @@ def str_ns(unix_time_ns: int, compact=False) -> str:
         return dt.strftime(FMT_MS_COMPACT)
     return dt.strftime(FMT_MS)
 
-def str_ns_diff(unix_time_ns: int) -> str:
-    return str(unix_time_ns) + "ns"
+def str_us_diff(unix_time_ns: int) -> str:
+    return str(unix_time_ns // 1_000) + "us"
