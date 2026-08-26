@@ -35,8 +35,8 @@ def test_parser_routes_tick_and_preserves_fields():
 
 def test_parser_routes_attr():
     line = (f'{{"timestamp":"{ATTR_TIMESTAMP}","kind":"attr",'
-            '"id":2,"pid":111,"name":"route","val":"/v1/orders",'
-            '"source":"config"}')
+            '"id":2,"pid":111,"type":"gw-attr","name":"route",'
+            '"value":"/v1/orders","source":"config"}')
 
     records = parser().parse([line])
 
@@ -45,9 +45,11 @@ def test_parser_routes_attr():
         "kind": "attr",
         "id": u.pack(2, 111),
         "pid": 111,
+        "type": "gw-attr",
         "name": "route",
-        "val": "/v1/orders",
+        "value": "/v1/orders",
         "source": "config",
+        "val": "/v1/orders",
     }]
     assert not records["tick"]
     assert not records["relation"]
@@ -55,7 +57,7 @@ def test_parser_routes_attr():
 
 def test_parser_routes_relation():
     line = (f'{{"timestamp":"{RELATION_TIMESTAMP}","kind":"relation",'
-            '"orig":{"id":1,"pid":111},"dest":{"id":2,"pid":111},'
+            '"orig_id":1,"orig_pid":111,"dest_id":2,"dest_pid":111,'
             '"type":"conn-to-gw","trace_id":"trace-1"}')
 
     records = parser().parse([line])
@@ -63,10 +65,14 @@ def test_parser_routes_relation():
     assert records["relation"] == [{
         "timestamp": RELATION_TIMESTAMP,
         "kind": "relation",
-        "orig": u.pack(1, 111),
-        "dest": u.pack(2, 111),
+        "orig_id": 1,
+        "orig_pid": 111,
+        "dest_id": 2,
+        "dest_pid": 111,
         "type": "conn-to-gw",
         "trace_id": "trace-1",
+        "orig": u.pack(1, 111),
+        "dest": u.pack(2, 111),
     }]
     assert not records["tick"]
     assert not records["attr"]
@@ -116,9 +122,10 @@ def test_parser_invalid_timestamp_reported_only_in_verbose(
         (f'{{"timestamp":"{TIMESTAMP}","kind":"tick","id":2,'
          '"pid":111,"type":"gw"}', "event"),
         (f'{{"timestamp":"{TIMESTAMP}","kind":"attr","id":2,'
-         '"pid":111,"name":"route"}', "val"),
+         '"pid":111,"type":"gw-attr","name":"route"}', "value"),
         (f'{{"timestamp":"{TIMESTAMP}","kind":"relation",'
-         '"orig":{"id":1,"pid":111},"type":"conn-to-gw"}', "dest"),
+         '"orig_id":1,"orig_pid":111,"dest_pid":111,'
+         '"type":"conn-to-gw"}', "dest_id"),
     ],
 )
 def test_parser_missing_required_field_reported_only_in_verbose(
@@ -136,10 +143,10 @@ def test_parser_persists_kind_records(tmp_path):
          '"id":2,"pid":111,"type":"gw","event":"inited",'
          '"samples":[1,2]}'),
         (f'{{"timestamp":"{ATTR_TIMESTAMP}","kind":"attr",'
-         '"id":2,"pid":111,"name":"route","val":"/v1/orders",'
-         '"source":"config"}'),
+         '"id":2,"pid":111,"type":"gw-attr","name":"route",'
+         '"value":"/v1/orders","source":"config"}'),
         (f'{{"timestamp":"{RELATION_TIMESTAMP}","kind":"relation",'
-         '"orig":{"id":1,"pid":111},"dest":{"id":2,"pid":111},'
+         '"orig_id":1,"orig_pid":111,"dest_id":2,"dest_pid":111,'
          '"type":"conn-to-gw","trace_id":"trace-1"}'),
     ]
     trace_path = tmp_path / "events.jsonl"

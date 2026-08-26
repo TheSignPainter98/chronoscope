@@ -17,8 +17,9 @@ class parser:
 
     required_fields = {
         "tick": {"timestamp", "kind", "id", "pid", "type", "event"},
-        "attr": {"timestamp", "kind", "id", "pid", "name", "val"},
-        "relation": {"timestamp", "kind", "orig", "dest", "type"},
+        "attr": {"timestamp", "kind", "id", "pid", "type", "name", "value"},
+        "relation": {"timestamp", "kind", "type", "orig_pid", "dest_pid",
+                     "orig_id", "dest_id"},
     }
 
     def __init__(self, verbose=False):
@@ -53,10 +54,10 @@ class parser:
                         rec["time"] = timestamp
                     case "attr":
                         rec["id"] = u.pack(rec["id"], rec["pid"])
+                        rec["val"] = rec["value"]
                     case "relation":
-                        orig, dest = rec["orig"], rec["dest"]
-                        rec["orig"] = u.pack(orig["id"], orig["pid"])
-                        rec["dest"] = u.pack(dest["id"], dest["pid"])
+                        rec["orig"] = u.pack(rec["orig_id"], rec["orig_pid"])
+                        rec["dest"] = u.pack(rec["dest_id"], rec["dest_pid"])
 
                 records[kind].append(rec)
             except Exception as e:
