@@ -73,22 +73,19 @@ def line_nr(file: str) -> int:
     result = sp.run(['wc', file], stdout=sp.PIPE, text=True)
     return int(result.stdout.split()[0])
 
-def load(trace_parser: pr.record_parser, trace_path: str,
-         fd_chunk_size=900, db_chunk_size=100):
+def load(pr: pr.parser, trace_path: str, fd_chunk_size=900, db_chunk_size=100):
     if not os.path.exists(trace_path):
-        raise FileNotFoundError(f"`{trace_path}' not found!")
+        raise FileNotFoundError("`{trace_path}' not found!")
 
     with b.open(trace_path) as fd:
         for fd_chunk in p.chunked(fd, fd_chunk_size):
-            records = trace_parser.parse(fd_chunk)
+            records = pr.parse(fd_chunk)
             with db.atomic():
                 for table in TABLES:
                     t_name: str = table._meta.name  # type: ignore
-                    fields = tuple(table._meta.sorted_fields)
-                    table_records = records.get(t_name, [])
-                    chunks = p.chunked(table_records, db_chunk_size)
-                    for db_chunk in chunks:
-                        table.insert_many(db_chunk, fields=fields).execute()
+                    for db_chunk in p.chunked(records[t_name], db_chunk_size):
+                        table.insert_many(
+                            db_chunk, fields=table._meta.sorted_fields).execute()
 
 def iterate(origin: int, parent: None | int, samples: type[tick] | type[attr],
             visit: Callable, depth: int, depth_max: int):

@@ -8,17 +8,9 @@
 #
 
 import chronoscope.utils as u
-from typing import Any, Protocol
+from typing import Any
 import json
 import sys
-
-class record_parser(Protocol):
-    tables: list[str]
-
-    def parse(
-            self, fd_chunk: list[str]
-    ) -> dict[str, list[dict[str, Any]]]:
-        ...
 
 
 class parser:
