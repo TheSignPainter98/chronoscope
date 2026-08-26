@@ -41,12 +41,8 @@ class relation(p.Model):
         database = db
         primary_key = p.CompositeKey("orig", "dest")
 
-class json_event(T):
-    timestamp = p.IntegerField()
-    payload = p.TextField()
 
-
-TABLES = [tick, attr, relation, json_event]
+TABLES = [tick, attr, relation]
 VERBOSE = False
 
 def open(path: str, opts: None | dict[str, int | str] = None, create=False,
@@ -72,7 +68,6 @@ def mkidx():
     db.execute_sql("CREATE INDEX tick_idx on tick(id);")
     db.execute_sql("CREATE INDEX relation_idx on relation(orig,dest);")
     db.execute_sql("CREATE INDEX attr_idx on attr(id);")
-    db.execute_sql("CREATE INDEX json_event_idx on json_event(timestamp);")
 
 def line_nr(file: str) -> int:
     result = sp.run(['wc', file], stdout=sp.PIPE, text=True)

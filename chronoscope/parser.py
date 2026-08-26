@@ -22,11 +22,11 @@ class record_parser(Protocol):
 
 
 class parser:
-    """Parses JSON Lines into raw and kind-specific records.
+    """Parses JSON Lines into kind-specific records.
 
     Each object must contain a top-level ``timestamp`` string and a ``kind``
     of ``tick``, ``attr``, or ``relation``. Extra fields stay on the parsed
-    kind record and are preserved verbatim in the raw event payload.
+    kind record.
     """
 
     required_fields = {
@@ -36,7 +36,7 @@ class parser:
     }
 
     def __init__(self, verbose=False):
-        self.tables = [*self.required_fields, "json_event"]
+        self.tables = list(self.required_fields)
         self.verbose = verbose
 
     def parse(self, fd_chunk: list[str]) -> dict[str, list[dict[str, Any]]]:
@@ -73,8 +73,6 @@ class parser:
                         rec["dest"] = u.pack(dest["id"], dest["pid"])
 
                 records[kind].append(rec)
-                records["json_event"].append(
-                    {"timestamp": timestamp, "payload": line})
             except Exception as e:
                 if self.verbose:
                     print(f"{e}: {line=}", file=sys.stderr)

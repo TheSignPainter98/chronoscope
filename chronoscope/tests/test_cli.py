@@ -25,13 +25,9 @@ def test_create_uses_parser_by_default(tmp_path, monkeypatch):
     assert chronoscope.main() == 0
 
     with sqlite3.connect(database_path) as connection:
-        event = connection.execute(
-            "SELECT timestamp, payload FROM json_event"
-        ).fetchone()
         tick = connection.execute(
             "SELECT id, time, type, event FROM tick"
         ).fetchone()
-    assert event == (u.ns(TIMESTAMP), payload)
     assert tick == (u.pack(2, 111), u.ns(TIMESTAMP), "gw", "inited")
 
 

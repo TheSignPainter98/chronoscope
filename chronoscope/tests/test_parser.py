@@ -10,7 +10,7 @@ ATTR_TIMESTAMP = "2055-11-29T20:57:56.489400110"
 RELATION_TIMESTAMP = "2055-11-29T20:57:56.489511716"
 
 
-def test_parser_routes_tick_and_preserves_payload():
+def test_parser_routes_tick_and_preserves_fields():
     line = (f'{{"timestamp":"{TICK_TIMESTAMP}","kind":"tick",'
             '"id":2,"pid":111,"type":"gw","event":"inited",'
             '"samples":[1,2]}')
@@ -30,8 +30,6 @@ def test_parser_routes_tick_and_preserves_payload():
         }],
         "attr": [],
         "relation": [],
-        "json_event": [{"timestamp": u.ns(TICK_TIMESTAMP),
-                        "payload": line}],
     }
 
 
@@ -51,9 +49,6 @@ def test_parser_routes_attr():
         "val": "/v1/orders",
         "source": "config",
     }]
-    assert records["json_event"] == [
-        {"timestamp": u.ns(ATTR_TIMESTAMP), "payload": line},
-    ]
     assert not records["tick"]
     assert not records["relation"]
 
@@ -73,9 +68,6 @@ def test_parser_routes_relation():
         "type": "conn-to-gw",
         "trace_id": "trace-1",
     }]
-    assert records["json_event"] == [
-        {"timestamp": u.ns(RELATION_TIMESTAMP), "payload": line},
-    ]
     assert not records["tick"]
     assert not records["attr"]
 
@@ -138,7 +130,7 @@ def test_parser_missing_required_field_reported_only_in_verbose(
     assert f"missing required fields: {missing}" in capsys.readouterr().err
 
 
-def test_parser_persists_raw_and_kind_records(tmp_path):
+def test_parser_persists_kind_records(tmp_path):
     lines = [
         (f'{{"timestamp":"{TICK_TIMESTAMP}","kind":"tick",'
          '"id":2,"pid":111,"type":"gw","event":"inited",'
@@ -161,9 +153,5 @@ def test_parser_persists_raw_and_kind_records(tmp_path):
         assert db.tick.select().count() == 1
         assert db.attr.select().count() == 1
         assert db.relation.select().count() == 1
-        assert db.json_event.select().count() == 3
-        events = db.json_event.select().order_by(db.json_event.timestamp)
-        payloads = [event.payload for event in events]
-        assert payloads == lines
     finally:
         db.close()
