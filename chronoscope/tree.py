@@ -21,9 +21,12 @@ class attr_visitor:
     def __init__(self, graph: Graph):
         self.graph = graph
 
-    def __call__(self, node_attrs: list[dict], current: int, parent: None | int):
-        contents = "<br/>".join([f"{na['name']}={na['val']}" for na in node_attrs])
-        self.graph.node(str(current), FMT_NODE.format(utils.unpack(current), contents))
+    def __call__(self, node_attrs: list[dict], current: int,
+                 parent: None | int):
+        contents = "<br/>".join(
+            [f"{na['name']}={na['val']}" for na in node_attrs])
+        label = FMT_NODE.format(utils.format_event_id(current), contents)
+        self.graph.node(str(current), label)
 
         if parent:
             self.graph.edge(str(parent), str(current))
@@ -31,5 +34,5 @@ class attr_visitor:
 def plot(origin: int, depth_max=50):
     g = Graph(strict=True, format="png", node_attr={"shape": "plaintext"})
     db.iterate(origin, None, db.attr, attr_visitor(g), 0, depth_max)
-    pid, id = utils.unpack(origin)
-    g.render(f"tree_{pid}_{id}", cleanup=True)
+    net_pid, boot_counter, id = utils.unpack_event_id(origin)
+    g.render(f"tree_{net_pid}_{boot_counter}_{id}", cleanup=True)
