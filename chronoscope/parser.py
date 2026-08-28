@@ -31,8 +31,15 @@ class parser:
         for line in fd_chunk:
             try:
                 rec = json.loads(line)
-                kind = rec["kind"]
             except Exception:
+                continue
+            if not isinstance(rec, dict):
+                continue
+            extra = rec.pop("extra_fields", None)
+            if extra:
+                rec.update(extra)
+            kind = rec.get("kind")
+            if not kind:
                 continue
             if kind not in records:
                 continue

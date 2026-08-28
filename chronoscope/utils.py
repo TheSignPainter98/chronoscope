@@ -38,7 +38,7 @@ def unpack(id_pid: int) -> tuple[int, int]:
 def ns(time: str) -> int:
     if len(time) != NS_TIME_LEN:
         raise ValueError("Not a nanosecond time format")
-    ms = int(t.strptime(time[:-3], FMT_MS).timestamp() * 1e6)
+    ms = int(t.strptime(time[:-3].replace(" ", "T"), FMT_MS).timestamp() * 1e6)
     return ms * 1_000 + int(time[-3:])
 
 def str_ns(unix_time_ns: int, compact=False) -> str:
