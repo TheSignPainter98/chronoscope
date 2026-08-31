@@ -8,7 +8,7 @@
 #
 
 import chronoscope.parser as pr
-from typing import Callable
+from typing import Callable, cast
 import subprocess as sp
 import builtins as b
 import peewee as p
@@ -159,7 +159,8 @@ def iterate(origin: int, parent: None | int,
     relations = state_machine_relation.select().where(
         relation_column == origin)
     for relation in relations.dicts():
-        related = relation[related_column.name]
+        relation_data = cast(dict[str, int], relation)
+        related = relation_data[related_column.name]
         if VERBOSE:
             print(f"@[{depth}] {hex(origin)} ... {hex(related)}")
         iterate(related, origin, visit, depth + 1, depth_max, reverse)

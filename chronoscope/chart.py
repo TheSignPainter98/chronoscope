@@ -164,7 +164,7 @@ def plot(origin: int, figsize=(16, 4), depth_max=50, reverse=False):
     # Keep the callback owner alive after non-blocking show() returns in
     # notebook backends such as ipympl. Matplotlib stores weak references to
     # bound-method callbacks.
-    fig._chronoscope_annotation = chart_annotation(fig)
+    setattr(fig, "_chronoscope_annotation", chart_annotation(fig))
 
     pt.grid(True)
     title = f"Request {utils.format_event_id(origin)}\n"
