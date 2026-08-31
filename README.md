@@ -1,5 +1,6 @@
 ![pytest/systest workflow](https://github.com/just-now/chronoscope/actions/workflows/python-package.yml/badge.svg)
 ![systest workflow](https://github.com/just-now/chronoscope/actions/workflows/makefile.yml/badge.svg)
+[![Open Raft demo in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/just-now/chronoscope/blob/feat/chronoscope-event-relation/examples/raft_demo.ipynb)
 
 # chronoscope
 Chronoscope, a cross-platform matplotlib-based observability tool
