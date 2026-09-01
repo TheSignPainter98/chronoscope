@@ -1,0 +1,77 @@
+{"timestamp": "2026-07-14T18:41:56.934806000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000002", "sm_type": "raft", "name": "role=Follower(t=1,l=0,ci=0,lc=0)"}
+{"timestamp": "2025-06-07T11:00:14.026305714", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000457", "to_sm_id": "0x1000000000000001", "relation": "top-to-raft", "from_name": "top"}
+{"timestamp": "2026-07-14T18:41:56.936405000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x1000000000000004", "sm_type": "raft", "name": "role=Follower(t=1,l=0,ci=0,lc=0)"}
+{"timestamp": "2025-06-07T11:00:14.026305714", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000457", "to_sm_id": "0x1000000000000003", "relation": "top-to-raft", "from_name": "top"}
+{"timestamp": "2026-07-14T18:41:56.937616000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x1000000000000006", "sm_type": "raft", "name": "role=Follower(t=1,l=0,ci=0,lc=0)"}
+{"timestamp": "2025-06-07T11:00:14.026305714", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000457", "to_sm_id": "0x1000000000000005", "relation": "top-to-raft", "from_name": "top"}
+{"timestamp": "2026-07-14T18:41:56.937809000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000007", "sm_type": "raft", "name": "et()"}
+{"timestamp": "2026-07-14T18:41:56.937821000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000008", "sm_type": "raft", "name": "role=Candidate(t=2,l=0,ci=0,lc=1)"}
+{"timestamp": "2026-07-14T18:41:56.937840000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000009", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.937852000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000000a", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.937867000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000000b", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.938200000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x100000000000000c", "sm_type": "raft", "name": "role=Follower(t=2,l=0,ci=0,lc=2)"}
+{"timestamp": "2026-07-14T18:41:56.938221000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x100000000000000d", "sm_type": "raft", "name": "rv(o=1,d=2,t=2,lt=0,li=0)"}
+{"timestamp": "2026-07-14T18:41:56.938231000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000000d", "peid": "0x100000000000000b"}
+{"timestamp": "2026-07-14T18:41:56.938247000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000000e", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.938275000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x100000000000000f", "sm_type": "raft", "name": "role=Follower(t=2,l=0,ci=0,lc=2)"}
+{"timestamp": "2026-07-14T18:41:56.938289000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x1000000000000010", "sm_type": "raft", "name": "rv(o=1,d=3,t=2,lt=0,li=0)"}
+{"timestamp": "2026-07-14T18:41:56.938298000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000010", "peid": "0x1000000000000009"}
+{"timestamp": "2026-07-14T18:41:56.938309000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000011", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.938335000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000012", "sm_type": "raft", "name": "rv(o=1,d=1,t=2,lt=0,li=0)"}
+{"timestamp": "2026-07-14T18:41:56.938345000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000012", "peid": "0x100000000000000a"}
+{"timestamp": "2026-07-14T18:41:56.938356000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000013", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.938440000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000014", "sm_type": "raft", "name": "rvr(o=2,d=1,t=2,vg=true)"}
+{"timestamp": "2026-07-14T18:41:56.938451000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000014", "peid": "0x100000000000000e"}
+{"timestamp": "2026-07-14T18:41:56.938464000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000015", "sm_type": "raft", "name": "rvr(o=3,d=1,t=2,vg=true)"}
+{"timestamp": "2026-07-14T18:41:56.938473000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000015", "peid": "0x1000000000000011"}
+{"timestamp": "2026-07-14T18:41:56.938487000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000016", "sm_type": "raft", "name": "becomeleader"}
+{"timestamp": "2026-07-14T18:41:56.938498000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000017", "sm_type": "raft", "name": "role=Leader(t=2,l=0,ci=0,lc=4)"}
+{"timestamp": "2026-07-14T18:41:56.938516000", "kind": "state_machine", "sm_id": "0x1000000000000018", "name": "DtxState", "state": "Init", "eid": "0x1000000000000019"}
+{"timestamp": "2026-07-14T18:41:56.938746000", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000001", "to_sm_id": "0x1000000000000018", "relation": "spawns"}
+{"timestamp": "2026-07-14T18:41:56.938763000", "kind": "state_machine", "sm_id": "0x1000000000000018", "name": "DtxState", "state": "Appended", "eid": "0x100000000000001a"}
+{"timestamp": "2026-07-14T18:41:56.939210000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x100000000000001b", "sm_type": "raft", "name": "rvr(o=1,d=1,t=2,vg=true)"}
+{"timestamp": "2026-07-14T18:41:56.939226000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000001b", "peid": "0x1000000000000013"}
+{"timestamp": "2026-07-14T18:41:56.939404000", "kind": "state_machine", "sm_id": "0x100000000000001c", "name": "DtxState", "state": "Init", "eid": "0x100000000000001d"}
+{"timestamp": "2026-07-14T18:41:56.939775000", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000001", "to_sm_id": "0x100000000000001c", "relation": "spawns"}
+{"timestamp": "2026-07-14T18:41:56.939792000", "kind": "state_machine", "sm_id": "0x100000000000001c", "name": "DtxState", "state": "Appended", "eid": "0x100000000000001e"}
+{"timestamp": "2026-07-14T18:41:56.939804000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x100000000000001f", "sm_type": "raft", "name": "hbt()"}
+{"timestamp": "2026-07-14T18:41:56.939819000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000020", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.939831000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000021", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.940085000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x1000000000000022", "sm_type": "raft", "name": "ae(o=1,d=2,t=2,ci=0,pli=0)"}
+{"timestamp": "2026-07-14T18:41:56.940100000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x1000000000000022", "peid": "0x1000000000000021"}
+{"timestamp": "2026-07-14T18:41:56.940496000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x1000000000000023", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.940597000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x1000000000000024", "sm_type": "raft", "name": "ae(o=1,d=3,t=2,ci=0,pli=0)"}
+{"timestamp": "2026-07-14T18:41:56.940612000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000024", "peid": "0x1000000000000020"}
+{"timestamp": "2026-07-14T18:41:56.940980000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000025", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.941360000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000026", "sm_type": "raft", "name": "aer(o=2,d=1,t=2,mi=1)"}
+{"timestamp": "2026-07-14T18:41:56.941371000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000026", "peid": "0x1000000000000023"}
+{"timestamp": "2026-07-14T18:41:56.941425000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000027", "sm_type": "raft", "name": "aci(to=1)"}
+{"timestamp": "2026-07-14T18:41:56.941438000", "kind": "state_machine", "sm_id": "0x1000000000000018", "name": "DtxState", "state": "Committed", "eid": "0x1000000000000028"}
+{"timestamp": "2026-07-14T18:41:56.941451000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000029", "sm_type": "raft", "name": "aer(o=3,d=1,t=2,mi=1)"}
+{"timestamp": "2026-07-14T18:41:56.941460000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000029", "peid": "0x1000000000000025"}
+{"timestamp": "2026-07-14T18:41:56.941475000", "kind": "state_machine", "sm_id": "0x1000000000000018", "name": "DtxState", "state": "ClusterStable", "eid": "0x100000000000002a"}
+{"timestamp": "2026-07-14T18:41:56.941711000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x100000000000002b", "sm_type": "raft", "name": "hbt()"}
+{"timestamp": "2026-07-14T18:41:56.941768000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000002c", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.941820000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000002d", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.942025000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x100000000000002e", "sm_type": "raft", "name": "ae(o=1,d=2,t=2,ci=1,pli=1)"}
+{"timestamp": "2026-07-14T18:41:56.942036000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000002e", "peid": "0x100000000000002d"}
+{"timestamp": "2026-07-14T18:41:56.942359000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000002f", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.942455000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x1000000000000030", "sm_type": "raft", "name": "ae(o=1,d=3,t=2,ci=1,pli=1)"}
+{"timestamp": "2026-07-14T18:41:56.942469000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000030", "peid": "0x100000000000002c"}
+{"timestamp": "2026-07-14T18:41:56.942823000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000031", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.943256000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000032", "sm_type": "raft", "name": "aer(o=2,d=1,t=2,mi=2)"}
+{"timestamp": "2026-07-14T18:41:56.943267000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000032", "peid": "0x100000000000002f"}
+{"timestamp": "2026-07-14T18:41:56.943331000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000033", "sm_type": "raft", "name": "aci(to=2)"}
+{"timestamp": "2026-07-14T18:41:56.943342000", "kind": "state_machine", "sm_id": "0x100000000000001c", "name": "DtxState", "state": "Committed", "eid": "0x1000000000000034"}
+{"timestamp": "2026-07-14T18:41:56.943353000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000035", "sm_type": "raft", "name": "aer(o=3,d=1,t=2,mi=2)"}
+{"timestamp": "2026-07-14T18:41:56.943363000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000035", "peid": "0x1000000000000031"}
+{"timestamp": "2026-07-14T18:41:56.943372000", "kind": "state_machine", "sm_id": "0x100000000000001c", "name": "DtxState", "state": "ClusterStable", "eid": "0x1000000000000036"}
+{"timestamp": "2026-07-14T18:41:56.944155000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000037", "sm_type": "raft", "name": "hbt()"}
+{"timestamp": "2026-07-14T18:41:56.944213000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000038", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.944275000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000039", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.944467000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x100000000000003a", "sm_type": "raft", "name": "ae(o=1,d=2,t=2,ci=2,pli=2)"}
+{"timestamp": "2026-07-14T18:41:56.944482000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000003a", "peid": "0x1000000000000039"}
+{"timestamp": "2026-07-14T18:41:56.944535000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000003b", "peid": null}
+{"timestamp": "2026-07-14T18:41:56.944639000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x100000000000003c", "sm_type": "raft", "name": "ae(o=1,d=3,t=2,ci=2,pli=2)"}
+{"timestamp": "2026-07-14T18:41:56.944654000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x100000000000003c", "peid": "0x1000000000000038"}
+{"timestamp": "2026-07-14T18:41:56.944703000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x100000000000003d", "peid": null}

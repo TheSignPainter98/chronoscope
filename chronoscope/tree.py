@@ -21,15 +21,19 @@ class attr_visitor:
     def __init__(self, graph: Graph):
         self.graph = graph
 
-    def __call__(self, node_attrs: list[dict], current: int, parent: None | int):
-        contents = "<br/>".join([f"{na['name']}={na['val']}" for na in node_attrs])
-        self.graph.node(str(current), FMT_NODE.format(utils.unpack(current), contents))
+    def __call__(self, timeline: list[dict], current: int, parent: None | int):
+        ids = [e["id"] for e in timeline]
+        attrs = (db.event_attribute.select()
+                 .where(db.event_attribute.event_id.in_(ids)).dicts())
+        contents = "<br/>".join([f"{a['key']}={a['value']}" for a in attrs])
+        self.graph.node(str(current),
+                        FMT_NODE.format(utils.unpack(current), contents))
 
         if parent:
             self.graph.edge(str(parent), str(current))
 
 def plot(origin: int, depth_max=50):
     g = Graph(strict=True, format="png", node_attr={"shape": "plaintext"})
-    db.iterate(origin, None, db.attr, attr_visitor(g), 0, depth_max)
+    db.iterate(origin, None, attr_visitor(g), 0, depth_max)
     pid, id = utils.unpack(origin)
     g.render(f"tree_{pid}_{id}", cleanup=True)

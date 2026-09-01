@@ -12,7 +12,7 @@ import chronoscope.utils as utils
 import matplotlib.cm as cm              # type: ignore
 import matplotlib.pyplot as pt          # type: ignore
 import matplotlib.ticker as ticker      # type: ignore
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import sys
 
 
@@ -25,7 +25,7 @@ def plot_timeline(timeline, y_pos: int):
     for current, current_tick in enumerate(timeline[:-1]):
         next_tick = timeline[current + 1]
         start_time, end_time = current_tick["time"], next_tick["time"]
-        event_label = current_tick["event"]
+        event_label = current_tick["name"]
 
         pt.hlines(y_pos_scaled, start_time, end_time, lw=4,
                   colors=cm.tab10(current % 7))  # type: ignore[attr-defined]
@@ -35,7 +35,7 @@ def plot_timeline(timeline, y_pos: int):
         pt.hlines(y_pos_scaled, timeline[0]["time"], timeline[0]["time"])
 
     pt.text(timeline[-1]["time"], y_pos_scaled,
-            timeline[-1]["event"], rotation=90)
+            timeline[-1]["name"], rotation=90)
 
 @dataclass
 class timeline_visitor:
@@ -43,17 +43,55 @@ class timeline_visitor:
     y_pos: int
     x_min: int
     x_max: int
+    # sm_id -> y_pos, for drawing event_relation arrows
+    sm_to_y: dict = field(default_factory=dict)
+    # (from_time, from_y, to_time, to_y) pairs for thin arrows
+    arrows: list = field(default_factory=list)
 
     def __call__(self, timeline: list[dict], origin: int, parent: None | int):
+        if not timeline:
+            self.sm_to_y[origin] = self.y_pos
+            self.y_pos += 1
+            self.y_labels.append(f"?{utils.unpack(origin)} [empty]")
+            return
         plot_timeline(timeline, self.y_pos)
-        self.y_pos += 1
+        self.sm_to_y[origin] = self.y_pos
         duration = round((timeline[-1]["time"] - timeline[0]["time"]) / 1e6, 3)
-        type, id = timeline[0]["type"], timeline[0]["id"]
-        self.y_labels.append(f"{type}{utils.unpack(id)} [{duration}ms]")
+        sm_type = timeline[0].get("sm_type", "?")
+        self.y_labels.append(f"{sm_type}{utils.unpack(origin)} [{duration}ms]")
 
         times = [tick["time"] for tick in timeline]
         self.x_min = min(self.x_min, min(times))
         self.x_max = max(self.x_max, max(times))
+        self.y_pos += 1
+
+    def collect_arrows(self):
+        """Query event_relation for (from_sm, from_time) -> (to_sm, to_time).
+
+        The sender's state machine and time come from the send event referenced
+        by each receive relation's from_event_id."""
+        sql = """
+        SELECT s.state_machine_id AS from_sm, s.time AS from_time,
+               r.to_sm_id AS to_sm,   r.to_time AS to_time
+        FROM event_relation r
+        JOIN event s ON s.id = r.from_event_id
+        WHERE r.from_event_id IS NOT NULL
+        """
+        for from_sm, from_time, to_sm, to_time in db.db.execute_sql(sql).fetchall():
+            if from_sm in self.sm_to_y and to_sm in self.sm_to_y:
+                self.arrows.append((
+                    from_time, -Y_LINE_SPACING * self.sm_to_y[from_sm],
+                    to_time,   -Y_LINE_SPACING * self.sm_to_y[to_sm],
+                ))
+
+def plot_arrows(arrows: list):
+    for from_time, from_y, to_time, to_y in arrows:
+        pt.annotate("",
+                    xy=(to_time, to_y), xytext=(from_time, from_y),
+                    arrowprops=dict(arrowstyle="-|>", color="navy",
+                                    lw=0.6, alpha=0.7,
+                                    shrinkA=2, shrinkB=2),
+                    zorder=10)
 
 class chart_annotation:
     def __init__(self, fig):
@@ -96,14 +134,15 @@ class chart_annotation:
         self.ann_mode = not self.ann_mode
         event.canvas.draw()
 
-def plot(origin: int, figsize=(16, 4), depth_max=50):
+def plot(origin: int, figsize=(16, 4), depth_max=50, reverse=False):
     fig = pt.figure(figsize=figsize)
     pt.style.use("bmh")
     pt.rcParams["font.size"] = 8
     pt.subplots_adjust(top=0.75)
 
     v = timeline_visitor([], 0, utils.MAX_INT, utils.MIN_INT)
-    db.iterate(origin, None, db.tick, v, 0, depth_max)
+    db.iterate(origin, None, v, 0, depth_max, reverse)
+    v.collect_arrows()
 
     end = -Y_LINE_SPACING * v.y_pos
     y_range = [float(x) for x in range(0, end, -Y_LINE_SPACING)]
@@ -116,6 +155,7 @@ def plot(origin: int, figsize=(16, 4), depth_max=50):
     pt.gca().xaxis.set_major_formatter(ticker.FuncFormatter(
         lambda value, pos: utils.str_ns(value, compact=True)))
 
+    plot_arrows(v.arrows)
     pt.yticks(y_range, v.y_labels)
     pt.xlabel("Time")
     pt.autoscale(enable=True, axis="x", tight=True)

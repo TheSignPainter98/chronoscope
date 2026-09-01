@@ -21,14 +21,16 @@ class timeline_visitor:
         self.timetable = timetable
 
     def __call__(self, timeline: list[dict], origin: int, parent: None | int):
+        if not timeline:
+            return
         t0 = timeline[0]
-        var = "{}_{}_{}".format(t0["type"], *u.unpack(t0["id"]))
+        var = "{}_{}_{}".format(t0["sm_type"], *u.unpack(t0["state_machine_id"]))
 
         ctr = self.writer.register_var("c", var, "string")
         self.gtkw.trace(f"c.{var}")
 
         self.counters[var] = ctr
-        self.timetable += [{"var": var, "time": t["time"], "event": t["event"]}
+        self.timetable += [{"var": var, "time": t["time"], "event": t["name"]}
                            for t in timeline]
 
 
@@ -40,9 +42,9 @@ def plot(origin: int, depth_max=50):
 
         with vcd.VCDWriter(fout, timescale="1 ns", date="today") as writer:
             counters: dict = {}
-            timetable: list[dict] = []
+            timetable: list = []
             v = timeline_visitor(gtkw, writer, counters, timetable)
-            db.iterate(origin, None, db.tick, v, 0, depth_max)
+            db.iterate(origin, None, v, 0, depth_max)
 
             timetable.sort(key=lambda t: t["time"])
             t0 = timetable[0]["time"]
