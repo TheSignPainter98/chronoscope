@@ -1,77 +1,83 @@
-{"timestamp": "2026-07-14T18:41:56.934806000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000002", "sm_type": "raft", "name": "role=Follower(t=1,l=0,ci=0,lc=0)"}
-{"timestamp": "2025-06-07T11:00:14.026305714", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000457", "to_sm_id": "0x1000000000000001", "relation": "top-to-raft", "from_name": "top"}
-{"timestamp": "2026-07-14T18:41:56.936405000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x1000000000000004", "sm_type": "raft", "name": "role=Follower(t=1,l=0,ci=0,lc=0)"}
-{"timestamp": "2025-06-07T11:00:14.026305714", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000457", "to_sm_id": "0x1000000000000003", "relation": "top-to-raft", "from_name": "top"}
-{"timestamp": "2026-07-14T18:41:56.937616000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x1000000000000006", "sm_type": "raft", "name": "role=Follower(t=1,l=0,ci=0,lc=0)"}
-{"timestamp": "2025-06-07T11:00:14.026305714", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000457", "to_sm_id": "0x1000000000000005", "relation": "top-to-raft", "from_name": "top"}
-{"timestamp": "2026-07-14T18:41:56.937809000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000007", "sm_type": "raft", "name": "et()"}
-{"timestamp": "2026-07-14T18:41:56.937821000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000008", "sm_type": "raft", "name": "role=Candidate(t=2,l=0,ci=0,lc=1)"}
-{"timestamp": "2026-07-14T18:41:56.937840000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000009", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.937852000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000000a", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.937867000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000000b", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.938200000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x100000000000000c", "sm_type": "raft", "name": "role=Follower(t=2,l=0,ci=0,lc=2)"}
-{"timestamp": "2026-07-14T18:41:56.938221000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x100000000000000d", "sm_type": "raft", "name": "rv(o=1,d=2,t=2,lt=0,li=0)"}
-{"timestamp": "2026-07-14T18:41:56.938231000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000000d", "peid": "0x100000000000000b"}
-{"timestamp": "2026-07-14T18:41:56.938247000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000000e", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.938275000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x100000000000000f", "sm_type": "raft", "name": "role=Follower(t=2,l=0,ci=0,lc=2)"}
-{"timestamp": "2026-07-14T18:41:56.938289000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x1000000000000010", "sm_type": "raft", "name": "rv(o=1,d=3,t=2,lt=0,li=0)"}
-{"timestamp": "2026-07-14T18:41:56.938298000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000010", "peid": "0x1000000000000009"}
-{"timestamp": "2026-07-14T18:41:56.938309000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000011", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.938335000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000012", "sm_type": "raft", "name": "rv(o=1,d=1,t=2,lt=0,li=0)"}
-{"timestamp": "2026-07-14T18:41:56.938345000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000012", "peid": "0x100000000000000a"}
-{"timestamp": "2026-07-14T18:41:56.938356000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000013", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.938440000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000014", "sm_type": "raft", "name": "rvr(o=2,d=1,t=2,vg=true)"}
-{"timestamp": "2026-07-14T18:41:56.938451000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000014", "peid": "0x100000000000000e"}
-{"timestamp": "2026-07-14T18:41:56.938464000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000015", "sm_type": "raft", "name": "rvr(o=3,d=1,t=2,vg=true)"}
-{"timestamp": "2026-07-14T18:41:56.938473000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000015", "peid": "0x1000000000000011"}
-{"timestamp": "2026-07-14T18:41:56.938487000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000016", "sm_type": "raft", "name": "becomeleader"}
-{"timestamp": "2026-07-14T18:41:56.938498000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000017", "sm_type": "raft", "name": "role=Leader(t=2,l=0,ci=0,lc=4)"}
-{"timestamp": "2026-07-14T18:41:56.938516000", "kind": "state_machine", "sm_id": "0x1000000000000018", "name": "DtxState", "state": "Init", "eid": "0x1000000000000019"}
-{"timestamp": "2026-07-14T18:41:56.938746000", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000001", "to_sm_id": "0x1000000000000018", "relation": "spawns"}
-{"timestamp": "2026-07-14T18:41:56.938763000", "kind": "state_machine", "sm_id": "0x1000000000000018", "name": "DtxState", "state": "Appended", "eid": "0x100000000000001a"}
-{"timestamp": "2026-07-14T18:41:56.939210000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x100000000000001b", "sm_type": "raft", "name": "rvr(o=1,d=1,t=2,vg=true)"}
-{"timestamp": "2026-07-14T18:41:56.939226000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000001b", "peid": "0x1000000000000013"}
-{"timestamp": "2026-07-14T18:41:56.939404000", "kind": "state_machine", "sm_id": "0x100000000000001c", "name": "DtxState", "state": "Init", "eid": "0x100000000000001d"}
-{"timestamp": "2026-07-14T18:41:56.939775000", "kind": "state_machine_relation", "from_sm_id": "0x1000000000000001", "to_sm_id": "0x100000000000001c", "relation": "spawns"}
-{"timestamp": "2026-07-14T18:41:56.939792000", "kind": "state_machine", "sm_id": "0x100000000000001c", "name": "DtxState", "state": "Appended", "eid": "0x100000000000001e"}
-{"timestamp": "2026-07-14T18:41:56.939804000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x100000000000001f", "sm_type": "raft", "name": "hbt()"}
-{"timestamp": "2026-07-14T18:41:56.939819000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000020", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.939831000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000021", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.940085000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x1000000000000022", "sm_type": "raft", "name": "ae(o=1,d=2,t=2,ci=0,pli=0)"}
-{"timestamp": "2026-07-14T18:41:56.940100000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x1000000000000022", "peid": "0x1000000000000021"}
-{"timestamp": "2026-07-14T18:41:56.940496000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x1000000000000023", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.940597000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x1000000000000024", "sm_type": "raft", "name": "ae(o=1,d=3,t=2,ci=0,pli=0)"}
-{"timestamp": "2026-07-14T18:41:56.940612000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000024", "peid": "0x1000000000000020"}
-{"timestamp": "2026-07-14T18:41:56.940980000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000025", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.941360000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000026", "sm_type": "raft", "name": "aer(o=2,d=1,t=2,mi=1)"}
-{"timestamp": "2026-07-14T18:41:56.941371000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000026", "peid": "0x1000000000000023"}
-{"timestamp": "2026-07-14T18:41:56.941425000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000027", "sm_type": "raft", "name": "aci(to=1)"}
-{"timestamp": "2026-07-14T18:41:56.941438000", "kind": "state_machine", "sm_id": "0x1000000000000018", "name": "DtxState", "state": "Committed", "eid": "0x1000000000000028"}
-{"timestamp": "2026-07-14T18:41:56.941451000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000029", "sm_type": "raft", "name": "aer(o=3,d=1,t=2,mi=1)"}
-{"timestamp": "2026-07-14T18:41:56.941460000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000029", "peid": "0x1000000000000025"}
-{"timestamp": "2026-07-14T18:41:56.941475000", "kind": "state_machine", "sm_id": "0x1000000000000018", "name": "DtxState", "state": "ClusterStable", "eid": "0x100000000000002a"}
-{"timestamp": "2026-07-14T18:41:56.941711000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x100000000000002b", "sm_type": "raft", "name": "hbt()"}
-{"timestamp": "2026-07-14T18:41:56.941768000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000002c", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.941820000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x100000000000002d", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.942025000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x100000000000002e", "sm_type": "raft", "name": "ae(o=1,d=2,t=2,ci=1,pli=1)"}
-{"timestamp": "2026-07-14T18:41:56.942036000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000002e", "peid": "0x100000000000002d"}
-{"timestamp": "2026-07-14T18:41:56.942359000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000002f", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.942455000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x1000000000000030", "sm_type": "raft", "name": "ae(o=1,d=3,t=2,ci=1,pli=1)"}
-{"timestamp": "2026-07-14T18:41:56.942469000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000030", "peid": "0x100000000000002c"}
-{"timestamp": "2026-07-14T18:41:56.942823000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x1000000000000031", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.943256000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000032", "sm_type": "raft", "name": "aer(o=2,d=1,t=2,mi=2)"}
-{"timestamp": "2026-07-14T18:41:56.943267000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000032", "peid": "0x100000000000002f"}
-{"timestamp": "2026-07-14T18:41:56.943331000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000033", "sm_type": "raft", "name": "aci(to=2)"}
-{"timestamp": "2026-07-14T18:41:56.943342000", "kind": "state_machine", "sm_id": "0x100000000000001c", "name": "DtxState", "state": "Committed", "eid": "0x1000000000000034"}
-{"timestamp": "2026-07-14T18:41:56.943353000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000035", "sm_type": "raft", "name": "aer(o=3,d=1,t=2,mi=2)"}
-{"timestamp": "2026-07-14T18:41:56.943363000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000035", "peid": "0x1000000000000031"}
-{"timestamp": "2026-07-14T18:41:56.943372000", "kind": "state_machine", "sm_id": "0x100000000000001c", "name": "DtxState", "state": "ClusterStable", "eid": "0x1000000000000036"}
-{"timestamp": "2026-07-14T18:41:56.944155000", "kind": "event", "sm_id": "0x1000000000000001", "eid": "0x1000000000000037", "sm_type": "raft", "name": "hbt()"}
-{"timestamp": "2026-07-14T18:41:56.944213000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000038", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.944275000", "kind": "event_relation", "sm_id": "0x1000000000000001", "eid": "0x1000000000000039", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.944467000", "kind": "event", "sm_id": "0x1000000000000003", "eid": "0x100000000000003a", "sm_type": "raft", "name": "ae(o=1,d=2,t=2,ci=2,pli=2)"}
-{"timestamp": "2026-07-14T18:41:56.944482000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000003a", "peid": "0x1000000000000039"}
-{"timestamp": "2026-07-14T18:41:56.944535000", "kind": "event_relation", "sm_id": "0x1000000000000003", "eid": "0x100000000000003b", "peid": null}
-{"timestamp": "2026-07-14T18:41:56.944639000", "kind": "event", "sm_id": "0x1000000000000005", "eid": "0x100000000000003c", "sm_type": "raft", "name": "ae(o=1,d=3,t=2,ci=2,pli=2)"}
-{"timestamp": "2026-07-14T18:41:56.944654000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x100000000000003c", "peid": "0x1000000000000038"}
-{"timestamp": "2026-07-14T18:41:56.944703000", "kind": "event_relation", "sm_id": "0x1000000000000005", "eid": "0x100000000000003d", "peid": null}
+{"kind":"state_machine","id":1152921504606846977,"name":"raft","type":"raft"}
+{"kind":"event","id":1152921504606846978,"state_machine_id":1152921504606846977,"time":1784050916934806000,"name":"role=Follower(t=1,l=0,ci=0,lc=0)"}
+{"kind":"state_machine","id":1152921504606848087,"name":"top","type":"top"}
+{"kind":"state_machine_relation","from_sm_id":1152921504606848087,"to_sm_id":1152921504606846977,"relation":"top-to-raft"}
+{"kind":"state_machine","id":1152921504606846979,"name":"raft","type":"raft"}
+{"kind":"event","id":1152921504606846980,"state_machine_id":1152921504606846979,"time":1784050916936405000,"name":"role=Follower(t=1,l=0,ci=0,lc=0)"}
+{"kind":"state_machine_relation","from_sm_id":1152921504606848087,"to_sm_id":1152921504606846979,"relation":"top-to-raft"}
+{"kind":"state_machine","id":1152921504606846981,"name":"raft","type":"raft"}
+{"kind":"event","id":1152921504606846982,"state_machine_id":1152921504606846981,"time":1784050916937616000,"name":"role=Follower(t=1,l=0,ci=0,lc=0)"}
+{"kind":"state_machine_relation","from_sm_id":1152921504606848087,"to_sm_id":1152921504606846981,"relation":"top-to-raft"}
+{"kind":"event","id":1152921504606846983,"state_machine_id":1152921504606846977,"time":1784050916937809000,"name":"et()"}
+{"kind":"event","id":1152921504606846984,"state_machine_id":1152921504606846977,"time":1784050916937821000,"name":"role=Candidate(t=2,l=0,ci=0,lc=1)"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606846985,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916937840000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606846986,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916937852000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606846987,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916937867000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606846988,"state_machine_id":1152921504606846979,"time":1784050916938200000,"name":"role=Follower(t=2,l=0,ci=0,lc=2)"}
+{"kind":"event","id":1152921504606846989,"state_machine_id":1152921504606846979,"time":1784050916938221000,"name":"rv(o=1,d=2,t=2,lt=0,li=0)"}
+{"kind":"event_relation","from_event_id":1152921504606846987,"to_event_id":1152921504606846989,"from_sm_id":1152921504606846979,"from_time":1784050916938231000,"to_sm_id":1152921504606846979,"to_time":1784050916938231000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606846990,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846979,"to_time":1784050916938247000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606846991,"state_machine_id":1152921504606846981,"time":1784050916938275000,"name":"role=Follower(t=2,l=0,ci=0,lc=2)"}
+{"kind":"event","id":1152921504606846992,"state_machine_id":1152921504606846981,"time":1784050916938289000,"name":"rv(o=1,d=3,t=2,lt=0,li=0)"}
+{"kind":"event_relation","from_event_id":1152921504606846985,"to_event_id":1152921504606846992,"from_sm_id":1152921504606846981,"from_time":1784050916938298000,"to_sm_id":1152921504606846981,"to_time":1784050916938298000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606846993,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846981,"to_time":1784050916938309000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606846994,"state_machine_id":1152921504606846977,"time":1784050916938335000,"name":"rv(o=1,d=1,t=2,lt=0,li=0)"}
+{"kind":"event_relation","from_event_id":1152921504606846986,"to_event_id":1152921504606846994,"from_sm_id":1152921504606846977,"from_time":1784050916938345000,"to_sm_id":1152921504606846977,"to_time":1784050916938345000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606846995,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916938356000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606846996,"state_machine_id":1152921504606846977,"time":1784050916938440000,"name":"rvr(o=2,d=1,t=2,vg=true)"}
+{"kind":"event_relation","from_event_id":1152921504606846990,"to_event_id":1152921504606846996,"from_sm_id":1152921504606846977,"from_time":1784050916938451000,"to_sm_id":1152921504606846977,"to_time":1784050916938451000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606846997,"state_machine_id":1152921504606846977,"time":1784050916938464000,"name":"rvr(o=3,d=1,t=2,vg=true)"}
+{"kind":"event_relation","from_event_id":1152921504606846993,"to_event_id":1152921504606846997,"from_sm_id":1152921504606846977,"from_time":1784050916938473000,"to_sm_id":1152921504606846977,"to_time":1784050916938473000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606846998,"state_machine_id":1152921504606846977,"time":1784050916938487000,"name":"becomeleader"}
+{"kind":"event","id":1152921504606846999,"state_machine_id":1152921504606846977,"time":1784050916938498000,"name":"role=Leader(t=2,l=0,ci=0,lc=4)"}
+{"kind":"state_machine","id":1152921504606847000,"name":"DtxState","type":"DtxState"}
+{"kind":"event","id":1152921504606847001,"state_machine_id":1152921504606847000,"time":1784050916938516000,"name":"Init"}
+{"kind":"state_machine_relation","from_sm_id":1152921504606846977,"to_sm_id":1152921504606847000,"relation":"spawns"}
+{"kind":"event","id":1152921504606847002,"state_machine_id":1152921504606847000,"time":1784050916938763000,"name":"Appended"}
+{"kind":"event","id":1152921504606847003,"state_machine_id":1152921504606846977,"time":1784050916939210000,"name":"rvr(o=1,d=1,t=2,vg=true)"}
+{"kind":"event_relation","from_event_id":1152921504606846995,"to_event_id":1152921504606847003,"from_sm_id":1152921504606846977,"from_time":1784050916939226000,"to_sm_id":1152921504606846977,"to_time":1784050916939226000,"relation":"event_relation"}
+{"kind":"state_machine","id":1152921504606847004,"name":"DtxState","type":"DtxState"}
+{"kind":"event","id":1152921504606847005,"state_machine_id":1152921504606847004,"time":1784050916939404000,"name":"Init"}
+{"kind":"state_machine_relation","from_sm_id":1152921504606846977,"to_sm_id":1152921504606847004,"relation":"spawns"}
+{"kind":"event","id":1152921504606847006,"state_machine_id":1152921504606847004,"time":1784050916939792000,"name":"Appended"}
+{"kind":"event","id":1152921504606847007,"state_machine_id":1152921504606846977,"time":1784050916939804000,"name":"hbt()"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847008,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916939819000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847009,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916939831000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847010,"state_machine_id":1152921504606846979,"time":1784050916940085000,"name":"ae(o=1,d=2,t=2,ci=0,pli=0)"}
+{"kind":"event_relation","from_event_id":1152921504606847009,"to_event_id":1152921504606847010,"from_sm_id":1152921504606846979,"from_time":1784050916940100000,"to_sm_id":1152921504606846979,"to_time":1784050916940100000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847011,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846979,"to_time":1784050916940496000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847012,"state_machine_id":1152921504606846981,"time":1784050916940597000,"name":"ae(o=1,d=3,t=2,ci=0,pli=0)"}
+{"kind":"event_relation","from_event_id":1152921504606847008,"to_event_id":1152921504606847012,"from_sm_id":1152921504606846981,"from_time":1784050916940612000,"to_sm_id":1152921504606846981,"to_time":1784050916940612000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847013,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846981,"to_time":1784050916940980000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847014,"state_machine_id":1152921504606846977,"time":1784050916941360000,"name":"aer(o=2,d=1,t=2,mi=1)"}
+{"kind":"event_relation","from_event_id":1152921504606847011,"to_event_id":1152921504606847014,"from_sm_id":1152921504606846977,"from_time":1784050916941371000,"to_sm_id":1152921504606846977,"to_time":1784050916941371000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847015,"state_machine_id":1152921504606846977,"time":1784050916941425000,"name":"aci(to=1)"}
+{"kind":"event","id":1152921504606847016,"state_machine_id":1152921504606847000,"time":1784050916941438000,"name":"Committed"}
+{"kind":"event","id":1152921504606847017,"state_machine_id":1152921504606846977,"time":1784050916941451000,"name":"aer(o=3,d=1,t=2,mi=1)"}
+{"kind":"event_relation","from_event_id":1152921504606847013,"to_event_id":1152921504606847017,"from_sm_id":1152921504606846977,"from_time":1784050916941460000,"to_sm_id":1152921504606846977,"to_time":1784050916941460000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847018,"state_machine_id":1152921504606847000,"time":1784050916941475000,"name":"ClusterStable"}
+{"kind":"event","id":1152921504606847019,"state_machine_id":1152921504606846977,"time":1784050916941711000,"name":"hbt()"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847020,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916941768000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847021,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916941820000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847022,"state_machine_id":1152921504606846979,"time":1784050916942025000,"name":"ae(o=1,d=2,t=2,ci=1,pli=1)"}
+{"kind":"event_relation","from_event_id":1152921504606847021,"to_event_id":1152921504606847022,"from_sm_id":1152921504606846979,"from_time":1784050916942036000,"to_sm_id":1152921504606846979,"to_time":1784050916942036000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847023,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846979,"to_time":1784050916942359000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847024,"state_machine_id":1152921504606846981,"time":1784050916942455000,"name":"ae(o=1,d=3,t=2,ci=1,pli=1)"}
+{"kind":"event_relation","from_event_id":1152921504606847020,"to_event_id":1152921504606847024,"from_sm_id":1152921504606846981,"from_time":1784050916942469000,"to_sm_id":1152921504606846981,"to_time":1784050916942469000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847025,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846981,"to_time":1784050916942823000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847026,"state_machine_id":1152921504606846977,"time":1784050916943256000,"name":"aer(o=2,d=1,t=2,mi=2)"}
+{"kind":"event_relation","from_event_id":1152921504606847023,"to_event_id":1152921504606847026,"from_sm_id":1152921504606846977,"from_time":1784050916943267000,"to_sm_id":1152921504606846977,"to_time":1784050916943267000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847027,"state_machine_id":1152921504606846977,"time":1784050916943331000,"name":"aci(to=2)"}
+{"kind":"event","id":1152921504606847028,"state_machine_id":1152921504606847004,"time":1784050916943342000,"name":"Committed"}
+{"kind":"event","id":1152921504606847029,"state_machine_id":1152921504606846977,"time":1784050916943353000,"name":"aer(o=3,d=1,t=2,mi=2)"}
+{"kind":"event_relation","from_event_id":1152921504606847025,"to_event_id":1152921504606847029,"from_sm_id":1152921504606846977,"from_time":1784050916943363000,"to_sm_id":1152921504606846977,"to_time":1784050916943363000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847030,"state_machine_id":1152921504606847004,"time":1784050916943372000,"name":"ClusterStable"}
+{"kind":"event","id":1152921504606847031,"state_machine_id":1152921504606846977,"time":1784050916944155000,"name":"hbt()"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847032,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916944213000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847033,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846977,"to_time":1784050916944275000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847034,"state_machine_id":1152921504606846979,"time":1784050916944467000,"name":"ae(o=1,d=2,t=2,ci=2,pli=2)"}
+{"kind":"event_relation","from_event_id":1152921504606847033,"to_event_id":1152921504606847034,"from_sm_id":1152921504606846979,"from_time":1784050916944482000,"to_sm_id":1152921504606846979,"to_time":1784050916944482000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847035,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846979,"to_time":1784050916944535000,"relation":"event_relation"}
+{"kind":"event","id":1152921504606847036,"state_machine_id":1152921504606846981,"time":1784050916944639000,"name":"ae(o=1,d=3,t=2,ci=2,pli=2)"}
+{"kind":"event_relation","from_event_id":1152921504606847032,"to_event_id":1152921504606847036,"from_sm_id":1152921504606846981,"from_time":1784050916944654000,"to_sm_id":1152921504606846981,"to_time":1784050916944654000,"relation":"event_relation"}
+{"kind":"event_relation","from_event_id":null,"to_event_id":1152921504606847037,"from_sm_id":null,"from_time":null,"to_sm_id":1152921504606846981,"to_time":1784050916944703000,"relation":"event_relation"}
