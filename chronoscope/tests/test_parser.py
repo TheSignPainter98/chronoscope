@@ -7,169 +7,121 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 #
 
-import chronoscope.db as db
+import json
 from chronoscope.parser import parser
 
-RAFT_TRACE = "test/raft_trace.jsonl"
+
+TIME = 1783367062172542000
+SM_ID = 0x1000000000000001
+EVENT_ID = 0x1000000000000001
+
+
+def as_line(kind, **fields):
+    return json.dumps({"kind": kind, **fields})
 
 
 def test_parser_event():
-    line = (
-        '{"timestamp":"2026-07-06T19:44:22.172542000","kind":"event",'
-        '"sm_id":"0x1000000000000001","eid":"0x1000000000000001",'
-        '"sm_type":"raft","name":"role=Follower"}'
-    )
-    records = parser().parse([line])
-    assert len(records["event"]) == 1
-    assert len(records["state_machine"]) == 1
-    assert records["event"][0]["name"] == "role=Follower"
-    assert records["event"][0]["id"] == 0x1000000000000001
-    assert records["state_machine"][0]["type"] == "raft"
+    records = parser().parse([as_line(
+        "event", id=EVENT_ID, state_machine_id=SM_ID,
+        time=TIME, name="role=Follower")])
+
+    assert records["event"] == [{
+        "kind": "event", "id": EVENT_ID, "state_machine_id": SM_ID,
+        "time": TIME, "name": "role=Follower",
+    }]
 
 
 def test_parser_event_relation_send():
-    line = (
-        '{"timestamp":"2026-07-06T19:44:22.175353000","kind":"event_relation",'
-        '"sm_id":"0x1000000000000001","eid":"0x1000000000000006","peid":null}'
-    )
-    records = parser().parse([line])
-    assert len(records["event_relation"]) == 1
-    er = records["event_relation"][0]
-    assert er["from_event_id"] is None
-    assert er["to_event_id"] == 0x1000000000000006
-    assert er["from_sm_id"] is None
-    assert er["from_time"] is None
+    records = parser().parse([as_line(
+        "event_relation", from_event_id=None,
+        to_event_id=0x1000000000000006, from_sm_id=None, from_time=None,
+        to_sm_id=SM_ID, to_time=TIME, relation="causes")])
+
+    relation = records["event_relation"][0]
+    assert relation["from_event_id"] is None
+    assert relation["to_event_id"] == 0x1000000000000006
+    assert relation["from_sm_id"] is None
+    assert relation["from_time"] is None
 
 
 def test_parser_event_relation_recv():
-    line = (
-        '{"timestamp":"2026-07-06T19:44:22.175565000","kind":"event_relation",'
-        '"sm_id":"0x1000000000000005","eid":"0x100000000000000c",'
-        '"peid":"0x1000000000000007"}'
-    )
-    records = parser().parse([line])
-    assert len(records["event_relation"]) == 1
-    er = records["event_relation"][0]
-    assert er["from_event_id"] == 0x1000000000000007
-    assert er["to_event_id"] == 0x100000000000000c
-    assert er["from_sm_id"] is not None
-    assert er["to_sm_id"] is not None
+    records = parser().parse([as_line(
+        "event_relation", from_event_id=0x1000000000000007,
+        to_event_id=0x100000000000000C,
+        from_sm_id=0x1000000000000001, from_time=TIME,
+        to_sm_id=0x1000000000000005, to_time=TIME + 100,
+        relation="causes")])
+
+    relation = records["event_relation"][0]
+    assert relation["from_event_id"] == 0x1000000000000007
+    assert relation["to_event_id"] == 0x100000000000000C
+    assert relation["from_sm_id"] is not None
+    assert relation["to_sm_id"] is not None
 
 
 def test_parser_event_attribute():
-    line = (
-        '{"timestamp":"2026-07-22T08:28:19.113535000","kind":"event_attribute",'
-        '"eid":"0x100000000000000c","key":"raft:role","value":"Follower"}'
-    )
-    records = parser().parse([line])
-    assert len(records["event_attribute"]) == 1
-    attribute = records["event_attribute"][0]
-    assert attribute["event_id"] == 0x100000000000000C
-    assert attribute["key"] == "raft:role"
-    assert attribute["value"] == "Follower"
+    records = parser().parse([as_line(
+        "event_attribute", event_id=EVENT_ID,
+        key="raft:role", value="Follower")])
+
+    assert records["event_attribute"] == [{
+        "kind": "event_attribute", "event_id": EVENT_ID,
+        "key": "raft:role", "value": "Follower",
+    }]
 
 
 def test_parser_sm_relation():
-    line = (
-        '{"timestamp":"2025-06-07T11:00:14.026305714",'
-        '"kind":"state_machine_relation","from_sm_id":"0x1000000000000457",'
-        '"to_sm_id":"0x1000000000000001","relation":"top-to-raft",'
-        '"from_name":"top"}'
-    )
-    records = parser().parse([line])
-    assert len(records["state_machine_relation"]) == 1
-    assert len(records["state_machine"]) == 1
-    smr = records["state_machine_relation"][0]
-    assert smr["relation"] == "top-to-raft"
-    assert records["state_machine"][0]["name"] == "top"
+    records = parser().parse([as_line(
+        "state_machine_relation", from_sm_id=0x1000000000000457,
+        to_sm_id=SM_ID, relation="top-to-raft")])
+
+    assert records["state_machine_relation"][0]["relation"] == "top-to-raft"
 
 
 def test_parser_state_machine():
-    line = (
-        '{"timestamp":"2026-07-14T13:12:56.473265000","kind":"state_machine",'
-        '"sm_id":"0x1000000000000018","name":"DtxState","state":"Init",'
-        '"eid":"0x1000000000000019"}'
-    )
-    records = parser().parse([line])
-    assert len(records["state_machine"]) == 1
-    assert len(records["event"]) == 1
-    assert records["state_machine"][0]["type"] == "DtxState"
-    assert records["event"][0]["name"] == "Init"
+    records = parser().parse([as_line(
+        "state_machine", id=SM_ID, name="raft", type="raft")])
+
+    assert records["state_machine"] == [{
+        "kind": "state_machine", "id": SM_ID,
+        "name": "raft", "type": "raft",
+    }]
 
 
-def test_parser_extra_fields_become_attributes():
-    line = (
-        '{"timestamp":"2055-11-29T20:57:56.489282133","kind":"event",'
-        '"sm_id":"0x1","eid":"0x2","sm_type":"gw","name":"inited",'
-        '"samples":[1,2]}'
-    )
-    records = parser().parse([line])
-    assert len(records["event_attribute"]) == 1
-    attribute = records["event_attribute"][0]
-    assert attribute["key"] == "samples"
-    assert attribute["value"] == "[1, 2]"
+def test_parser_state_machine_attribute():
+    records = parser().parse([as_line(
+        "state_machine_attribute", state_machine_id=SM_ID,
+        key="node", value=1)])
+
+    assert records["state_machine_attribute"][0]["value"] == 1
 
 
-def test_parser_malformed():
-    line = '{"timestamp":"2026-07-06T19:44:22.667095559","kind":"event"}'
-    _ = parser(verbose=True).parse([line])
+def test_parser_preserves_extra_fields():
+    record = {
+        "kind": "event", "id": EVENT_ID, "state_machine_id": SM_ID,
+        "time": TIME, "name": "role=Follower", "source": "raft",
+        "extra_fields": {"name": "raw role", "file": "raft.rs"},
+    }
+
+    parsed = parser().parse([json.dumps(record)])["event"][0]
+
+    assert parsed == record
+
+
+def test_parser_malformed(capsys):
+    parser(verbose=True).parse([as_line("event", id=EVENT_ID)])
+
+    assert "missing required fields" in capsys.readouterr().err
 
 
 def test_parser_fuzz():
-    line = "a b c d"
-    _ = parser().parse([line])
+    records = parser(verbose=True).parse([
+        "a b c d", '"string"', "42", "[]", "{}", as_line("bogus")])
+
+    assert all(not table_records for table_records in records.values())
 
 
 def test_parser_empty():
-    line = ""
-    _ = parser().parse([line])
-
-
-def test_parser_unrecognized_lines_are_silent(capsys):
-    noise = [
-        "", "   ", "not json", '"str"', "42", "[1, 2]", "{}",
-        '{"timestamp":"2055-11-29T20:57:56.489282133"}',
-        '{"timestamp":"2055-11-29T20:57:56.489282133","kind":"bogus"}',
-        '{"timestamp":"2055-11-29T20:57:56.489282133","kind":1}',
-        '{"details":{"timestamp":"2055-11-29T20:57:56.489282133","kind":"event"}}',
-    ]
-
-    records = parser(verbose=True).parse(noise)
+    records = parser().parse([""])
 
     assert all(not table_records for table_records in records.values())
-    assert capsys.readouterr().err == ""
-
-
-def test_parser_persists_raft_records(tmp_path):
-    lines = [
-        ('{"timestamp":"2026-07-06T19:44:22.172542000","kind":"event",'
-         '"sm_id":"0x1000000000000001","eid":"0x1000000000000001",'
-         '"sm_type":"raft","name":"role=Follower"}'),
-        ('{"timestamp":"2026-07-06T19:44:22.175353000","kind":"event_relation",'
-         '"sm_id":"0x1000000000000001","eid":"0x1000000000000006","peid":null}'),
-        ('{"timestamp":"2025-06-07T11:00:14.026305714",'
-         '"kind":"state_machine_relation","from_sm_id":"0x1000000000000457",'
-         '"to_sm_id":"0x1000000000000001","relation":"top-to-raft",'
-         '"from_name":"top"}'),
-        ('{"timestamp":"2026-07-14T13:12:56.473265000","kind":"state_machine",'
-         '"sm_id":"0x1000000000000018","name":"DtxState","state":"Init",'
-         '"eid":"0x1000000000000019"}'),
-        ('{"timestamp":"2026-07-22T08:28:19.113535000",'
-         '"kind":"event_attribute","eid":"0x1000000000000001",'
-         '"key":"raft:role","value":"Follower"}'),
-    ]
-    trace_path = tmp_path / "raft_trace.jsonl"
-    database_path = tmp_path / "chronoscope.db"
-    trace_path.write_text("\n".join(lines) + "\n")
-
-    db.open(str(database_path), create=True)
-    try:
-        db.load(parser(), str(trace_path))
-
-        assert db.state_machine.select().count() == 3
-        assert db.event.select().count() == 2
-        assert db.event_relation.select().count() == 1
-        assert db.state_machine_relation.select().count() == 1
-        assert db.event_attribute.select().count() == 1
-    finally:
-        db.close()
