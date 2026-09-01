@@ -10,6 +10,7 @@
 import chronoscope.db as db
 import chronoscope.utils as utils
 from graphviz import Graph  # type: ignore
+from typing import cast
 
 # https://graphviz.readthedocs.io/en/stable/examples.html#structs-py
 FMT_NODE = """<
@@ -21,15 +22,31 @@ class attr_visitor:
     def __init__(self, graph: Graph):
         self.graph = graph
 
-    def __call__(self, node_attrs: list[dict], current: int, parent: None | int):
-        contents = "<br/>".join([f"{na['name']}={na['val']}" for na in node_attrs])
-        self.graph.node(str(current), FMT_NODE.format(utils.unpack(current), contents))
+    def __call__(self, timeline: list[dict], current: int,
+                 parent: None | int):
+        machine = cast(dict[str, object],
+                       (db.state_machine
+                        .select()
+                        .where(db.state_machine.id == current)
+                        .dicts()
+                        .get()))
+        attributes = (db.state_machine_attribute
+                      .select()
+                      .where(db.state_machine_attribute.state_machine_id == current)
+                      .dicts())
+        rows = [f"name={machine['name']}", f"type={machine['type']}"]
+        for attribute in attributes:
+            attribute_data = cast(dict[str, object], attribute)
+            rows.append(f"{attribute_data['key']}={attribute_data['value']}")
+        contents = "<br/>".join(rows)
+        label = FMT_NODE.format(utils.format_event_id(current), contents)
+        self.graph.node(str(current), label)
 
-        if parent:
+        if parent is not None:
             self.graph.edge(str(parent), str(current))
 
 def plot(origin: int, depth_max=50):
     g = Graph(strict=True, format="png", node_attr={"shape": "plaintext"})
-    db.iterate(origin, None, db.attr, attr_visitor(g), 0, depth_max)
-    pid, id = utils.unpack(origin)
-    g.render(f"tree_{pid}_{id}", cleanup=True)
+    db.iterate(origin, None, attr_visitor(g), 0, depth_max)
+    net_pid, boot_counter, id = utils.unpack_event_id(origin)
+    g.render(f"tree_{net_pid}_{boot_counter}_{id}", cleanup=True)

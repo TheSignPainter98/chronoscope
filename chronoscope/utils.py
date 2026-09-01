@@ -17,6 +17,9 @@ MAX_INT = sys.maxsize
 MIN_INT = -sys.maxsize - 1
 BITS_PER_PID = 16
 DB_INT_SIZE = 64
+NET_PID_BITS = 4
+BOOT_COUNTER_BITS = 12
+EVENT_COUNTER_BITS = 48
 
 
 def pack_unpack_init(p_bits_per_pid: int, p_db_int_size: int):
@@ -35,6 +38,17 @@ def unpack(id_pid: int) -> tuple[int, int]:
     id = ((1 << (DB_INT_SIZE - BITS_PER_PID)) - 1) & id_pid
     return pid, id
 
+def unpack_event_id(event_id: int) -> tuple[int, int, int]:
+    net_pid = event_id >> (BOOT_COUNTER_BITS + EVENT_COUNTER_BITS)
+    boot_mask = (1 << BOOT_COUNTER_BITS) - 1
+    boot_counter = (event_id >> EVENT_COUNTER_BITS) & boot_mask
+    counter = event_id & ((1 << EVENT_COUNTER_BITS) - 1)
+    return net_pid, boot_counter, counter
+
+def format_event_id(event_id: int) -> str:
+    net_pid, boot_counter, counter = unpack_event_id(event_id)
+    return f"({net_pid} {boot_counter} {counter})"
+
 def ns(time: str) -> int:
     if len(time) != NS_TIME_LEN:
         raise ValueError("Not a nanosecond time format")
@@ -47,5 +61,5 @@ def str_ns(unix_time_ns: int, compact=False) -> str:
         return dt.strftime(FMT_MS_COMPACT)
     return dt.strftime(FMT_MS)
 
-def str_ns_diff(unix_time_ns: int) -> str:
-    return str(unix_time_ns) + "ns"
+def str_us_diff(unix_time_ns: int) -> str:
+    return str(unix_time_ns // 1_000) + "us"

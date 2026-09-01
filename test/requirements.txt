@@ -4,3 +4,6 @@ PyYAML
 graphviz
 scipy
 pyvcd
+pytest
+mypy
+types-PyYAML

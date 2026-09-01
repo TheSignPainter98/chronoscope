@@ -52,13 +52,14 @@ class timeline_visitor:
         if not timeline:
             self.sm_to_y[origin] = self.y_pos
             self.y_pos += 1
-            self.y_labels.append(f"?{utils.unpack(origin)} [empty]")
+            self.y_labels.append(f"?{utils.format_event_id(origin)} [empty]")
             return
         plot_timeline(timeline, self.y_pos)
         self.sm_to_y[origin] = self.y_pos
         duration = round((timeline[-1]["time"] - timeline[0]["time"]) / 1e6, 3)
         sm_type = timeline[0].get("sm_type", "?")
-        self.y_labels.append(f"{sm_type}{utils.unpack(origin)} [{duration}ms]")
+        label = f"{sm_type}{utils.format_event_id(origin)} [{duration}ms]"
+        self.y_labels.append(label)
 
         times = [tick["time"] for tick in timeline]
         self.x_min = min(self.x_min, min(times))
@@ -125,7 +126,7 @@ class chart_annotation:
         cursor = chr(self.cur_mark)
         if self.cur_mark % 2 == 0:
             cursor = chr(self.cur_mark - 1) + cursor + ": "
-            cursor += utils.str_ns_diff(int(abs(self.cur[-1] - self.cur[-2])))
+            cursor += utils.str_us_diff(int(abs(self.cur[-1] - self.cur[-2])))
         self.cur_mark += 1
 
         self.ann.append(ax.axvline(x=x, color="lightgray"))
@@ -160,10 +161,13 @@ def plot(origin: int, figsize=(16, 4), depth_max=50, reverse=False):
     pt.xlabel("Time")
     pt.autoscale(enable=True, axis="x", tight=True)
     pt.margins(0.1)
-    _ = chart_annotation(fig)
+    # Keep the callback owner alive after non-blocking show() returns in
+    # notebook backends such as ipympl. Matplotlib stores weak references to
+    # bound-method callbacks.
+    setattr(fig, "_chronoscope_annotation", chart_annotation(fig))
 
     pt.grid(True)
-    title = f"Request {utils.unpack(origin)}\n"
+    title = f"Request {utils.format_event_id(origin)}\n"
     title += f"[{utils.str_ns(x_range[0])}...{utils.str_ns(x_range[-1])}]"
     pt.suptitle(title)
     pt.show()

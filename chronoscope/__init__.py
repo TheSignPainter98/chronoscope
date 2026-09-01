@@ -19,7 +19,7 @@ import argparse as arg
 import errno
 import sys
 
-__version__ = '0.0.4'
+__version__ = '0.0.5.dev0'
 __author__ = 'Anatoliy Bilenko <anatoliy.bilenko@gmail.com>'
 __license__ = 'LGPLv3'
 
