@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/just-now/chronoscope/log-entry-schema.json",
+  "title": "Chronoscope PL089 log entry",
+  "description": "Schema for one JSON object in a Chronoscope JSON Lines trace.",
+  "oneOf": [
+    { "$ref": "#/$defs/state_machine" },
+    { "$ref": "#/$defs/event" },
+    { "$ref": "#/$defs/event_relation" },
+    { "$ref": "#/$defs/state_machine_relation" },
+    { "$ref": "#/$defs/state_machine_attribute" },
+    { "$ref": "#/$defs/event_attribute" }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "integer",
+      "description": "Globally-unique 64-bit entity identifier."
+    },
+    "attribute_value": {
+      "description": "Any non-null JSON value.",
+      "not": { "type": "null" }
+    },
+    "state_machine": {
+      "type": "object",
+      "required": ["kind", "id", "name"],
+      "properties": {
+        "kind": { "const": "state_machine" },
+        "id": { "$ref": "#/$defs/identifier" },
+        "name": { "type": "string" },
+        "type": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "event": {
+      "type": "object",
+      "required": ["kind", "id", "state_machine_id", "timestamp", "name"],
+      "properties": {
+        "kind": { "const": "event" },
+        "id": { "$ref": "#/$defs/identifier" },
+        "state_machine_id": { "$ref": "#/$defs/identifier" },
+        "timestamp": {
+          "type": "string",
+          "description": "Event timestamp as emitted by the trace source."
+        },
+        "name": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "event_relation": {
+      "type": "object",
+      "required": ["kind", "from_event_id", "to_event_id", "relation"],
+      "properties": {
+        "kind": { "const": "event_relation" },
+        "from_event_id": { "$ref": "#/$defs/identifier" },
+        "to_event_id": { "$ref": "#/$defs/identifier" },
+        "relation": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "state_machine_relation": {
+      "type": "object",
+      "required": ["kind", "from_sm_id", "to_sm_id", "relation"],
+      "properties": {
+        "kind": { "const": "state_machine_relation" },
+        "from_sm_id": { "$ref": "#/$defs/identifier" },
+        "to_sm_id": { "$ref": "#/$defs/identifier" },
+        "relation": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "state_machine_attribute": {
+      "type": "object",
+      "required": ["kind", "state_machine_id", "key", "value"],
+      "properties": {
+        "kind": { "const": "state_machine_attribute" },
+        "state_machine_id": { "$ref": "#/$defs/identifier" },
+        "key": { "type": "string" },
+        "value": { "$ref": "#/$defs/attribute_value" }
+      },
+      "additionalProperties": true
+    },
+    "event_attribute": {
+      "type": "object",
+      "required": ["kind", "event_id", "key", "value"],
+      "properties": {
+        "kind": { "const": "event_attribute" },
+        "event_id": { "$ref": "#/$defs/identifier" },
+        "key": { "type": "string" },
+        "value": { "$ref": "#/$defs/attribute_value" }
+      },
+      "additionalProperties": true
+    }
+  }
+}
