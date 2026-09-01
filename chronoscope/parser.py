@@ -7,6 +7,7 @@
 # SPDX-License-Identifier: LGPL-3.0-only
 #
 
+import chronoscope.utils as u
 from typing import Any
 import json
 import sys
@@ -15,7 +16,7 @@ import sys
 class parser:
     required_fields = {
         "state_machine": {"id", "name", "type"},
-        "event": {"id", "state_machine_id", "time", "name"},
+        "event": {"id", "state_machine_id", "name"},
         "event_relation": {"from_event_id", "to_event_id", "from_sm_id",
                            "from_time", "to_sm_id", "to_time", "relation"},
         "state_machine_relation": {"from_sm_id", "to_sm_id", "relation"},
@@ -37,16 +38,29 @@ class parser:
             if not isinstance(record, dict):
                 continue
 
-            kind = record.get("kind")
+            fields = record.get("extra_fields")
+            if not isinstance(fields, dict):
+                continue
+            kind = fields.get("kind")
             if kind not in records:
                 continue
 
-            missing = self.required_fields[kind].difference(record)
+            missing = self.required_fields[kind].difference(fields)
+            if "timestamp" not in record:
+                missing.add("timestamp")
             if missing:
                 if self.verbose:
-                    fields = ", ".join(sorted(missing))
-                    print(f"missing required fields: {fields}: "
+                    names = ", ".join(sorted(missing))
+                    print(f"missing required fields: {names}: "
                           f"line={line.strip()!r}", file=sys.stderr)
                 continue
-            records[kind].append(record)
+            fields = fields.copy()
+            if kind == "event":
+                try:
+                    fields["time"] = u.ns(record["timestamp"])
+                except Exception as e:
+                    if self.verbose:
+                        print(f"{e}: line={line.strip()!r}", file=sys.stderr)
+                    continue
+            records[kind].append(fields)
         return records
