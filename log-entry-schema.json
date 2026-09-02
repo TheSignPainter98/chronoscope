@@ -30,8 +30,7 @@
       "description": "Globally-unique 64-bit entity identifier."
     },
     "attribute_value": {
-      "description": "Any non-null JSON value.",
-      "not": { "type": "null" }
+      "description": "Any JSON value."
     },
     "state_machine": {
       "type": "object",
