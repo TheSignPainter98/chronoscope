@@ -9,7 +9,7 @@
     "timestamp": {
       "type": "string",
       "description": "Timestamp emitted by the trace source.",
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}[T ]\\d{2}:\\d{2}:\\d{2}\\.\\d{9}$"
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}[T ]\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}$"
     },
     "thread_id": { "type": "integer" },
     "extra_fields": {
@@ -34,7 +34,7 @@
     },
     "state_machine": {
       "type": "object",
-      "required": ["kind", "id", "name", "type"],
+      "required": ["kind", "id", "name"],
       "properties": {
         "kind": { "const": "state_machine" },
         "id": { "$ref": "#/$defs/identifier" },
@@ -57,27 +57,15 @@
     "event_relation": {
       "type": "object",
       "required": [
-        "kind", "from_event_id", "to_event_id", "from_sm_id", "from_time",
-        "to_sm_id", "to_time", "relation"
+        "kind", "from_event_id", "to_event_id", "from_sm_id",
+        "to_sm_id", "relation"
       ],
       "properties": {
         "kind": { "const": "event_relation" },
-        "from_event_id": {
-          "oneOf": [
-            { "$ref": "#/$defs/identifier" },
-            { "type": "null" }
-          ]
-        },
+        "from_event_id": { "$ref": "#/$defs/identifier" },
         "to_event_id": { "$ref": "#/$defs/identifier" },
-        "from_sm_id": {
-          "oneOf": [
-            { "$ref": "#/$defs/identifier" },
-            { "type": "null" }
-          ]
-        },
-        "from_time": { "type": ["integer", "null"] },
+        "from_sm_id": { "$ref": "#/$defs/identifier" },
         "to_sm_id": { "$ref": "#/$defs/identifier" },
-        "to_time": { "type": "integer" },
         "relation": { "type": "string" }
       },
       "additionalProperties": true

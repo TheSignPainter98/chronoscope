@@ -50,8 +50,6 @@ def format_event_id(event_id: int) -> str:
     return f"({net_pid} {boot_counter} {counter})"
 
 def ns(time: str) -> int:
-    if len(time) != NS_TIME_LEN:
-        raise ValueError("Not a nanosecond time format")
     ms = int(t.strptime(time[:-3].replace(" ", "T"), FMT_MS).timestamp() * 1e6)
     return ms * 1_000 + int(time[-3:])
 
