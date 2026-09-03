@@ -18,7 +18,7 @@ class parser:
         "state_machine": {"id", "name", "type"},
         "event": {"id", "state_machine_id", "name"},
         "event_relation": {"from_event_id", "to_event_id", "from_sm_id",
-                           "from_time", "to_sm_id", "to_time", "relation"},
+                           "to_sm_id", "relation"},
         "state_machine_relation": {"from_sm_id", "to_sm_id", "relation"},
         "state_machine_attribute": {"state_machine_id", "key", "value"},
         "event_attribute": {"event_id", "key", "value"},
@@ -62,5 +62,12 @@ class parser:
                     if self.verbose:
                         print(f"{e}: line={line.strip()!r}", file=sys.stderr)
                     continue
+            if kind == "event_relation":
+                # HACK: from_time/to_time carry no useful data and are slated
+                # for removal upstream; overwrite with a dummy so stale values
+                # never reach the DB. Delete this block once the fields
+                # disappear.
+                fields["from_time"] = 0
+                fields["to_time"] = 0
             records[kind].append(fields)
         return records

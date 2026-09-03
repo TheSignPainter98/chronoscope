@@ -30,7 +30,6 @@ def test_parser_event_relation_send():
     assert er["from_event_id"] is None
     assert er["to_event_id"] == 0x1000000000000006
     assert er["from_sm_id"] is None
-    assert er["from_time"] is None
 
 
 def test_parser_event_relation_recv():
