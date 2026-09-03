@@ -29,9 +29,6 @@
       "type": "integer",
       "description": "Globally-unique 64-bit entity identifier."
     },
-    "attribute_value": {
-      "description": "Any JSON value."
-    },
     "state_machine": {
       "type": "object",
       "required": ["kind", "id", "name"],
@@ -50,7 +47,7 @@
         "kind": { "const": "event" },
         "id": { "$ref": "#/$defs/identifier" },
         "state_machine_id": { "$ref": "#/$defs/identifier" },
-        "name": { "type": "string" }
+        "name": {}
       },
       "additionalProperties": true
     },
@@ -88,7 +85,7 @@
         "kind": { "const": "state_machine_attribute" },
         "state_machine_id": { "$ref": "#/$defs/identifier" },
         "key": { "type": "string" },
-        "value": { "$ref": "#/$defs/attribute_value" }
+        "value": {}
       },
       "additionalProperties": true
     },
@@ -99,7 +96,7 @@
         "kind": { "const": "event_attribute" },
         "event_id": { "$ref": "#/$defs/identifier" },
         "key": { "type": "string" },
-        "value": { "$ref": "#/$defs/attribute_value" }
+        "value": {}
       },
       "additionalProperties": true
     }
