@@ -62,12 +62,41 @@ class parser:
                     if self.verbose:
                         print(f"{e}: line={line.strip()!r}", file=sys.stderr)
                     continue
+
+                # Event-producing trace sources also describe their owning
+                # state machine.
+                event_type = fields.get("type")
+                if event_type is not None:
+                    machine = fields.get("machine", event_type)
+                    records["state_machine"].append({
+                        "id": fields["state_machine_id"],
+                        "name": machine,
+                        "type": machine,
+                    })
+
             if kind == "event_relation":
-                # HACK: from_time/to_time carry no useful data and are slated
-                # for removal upstream; overwrite with a dummy so stale values
-                # never reach the DB. Delete this block once the fields
-                # disappear.
-                fields["from_time"] = 0
-                fields["to_time"] = 0
+                try:
+                    relation_time = u.ns(record["timestamp"])
+                except Exception as e:
+                    if self.verbose:
+                        print(f"{e}: line={line.strip()!r}", file=sys.stderr)
+                    continue
+                fields["from_time"] = (
+                    relation_time if fields["from_event_id"] is not None else None
+                )
+                fields["to_time"] = relation_time
+
+            if (kind == "state_machine_relation" and
+                    fields["relation"] == "top-to-raft"):
+                records["state_machine"].append({
+                    "id": fields["from_sm_id"],
+                    "name": "top",
+                    "type": "top",
+                })
+            if kind in {"event_attribute", "state_machine_attribute"}:
+                value = fields["value"]
+                if isinstance(value, bool):
+                    fields["value"] = "true" if value else "false"
+
             records[kind].append(fields)
         return records

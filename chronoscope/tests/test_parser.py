@@ -1,4 +1,5 @@
 from chronoscope.parser import parser
+import chronoscope.utils as u
 
 
 TIMESTAMP = "2026-07-06 19:44:22.172542000"
@@ -16,6 +17,36 @@ def test_parser_event():
     assert records["event"][0]["id"] == 0x1000000000000001
 
 
+def test_parser_event_creates_state_machine_from_type():
+    line = (
+        '{"timestamp":"2026-07-06 19:44:22.172542000",'
+        '"extra_fields":{"kind":"event","id":1152921504606846978,'
+        '"state_machine_id":1152921504606846977,"name":"restart",'
+        '"type":"raft"}}'
+    )
+    records = parser().parse([line])
+    assert records["state_machine"] == [{
+        "id": 1152921504606846977,
+        "name": "raft",
+        "type": "raft",
+    }]
+
+
+def test_parser_state_transition_event_creates_named_state_machine():
+    line = (
+        '{"timestamp":"2026-07-06 19:44:22.172542000",'
+        '"extra_fields":{"kind":"event","id":1152921504606846980,'
+        '"state_machine_id":1152921504606846979,"name":"NotALeader",'
+        '"machine":"FirstRecordState","type":"state_machine"}}'
+    )
+    records = parser().parse([line])
+    assert records["state_machine"] == [{
+        "id": 1152921504606846979,
+        "name": "FirstRecordState",
+        "type": "FirstRecordState",
+    }]
+
+
 def test_parser_event_relation_send():
     line = (
         '{"timestamp":"2026-07-06 19:44:22.175353000",'
@@ -30,6 +61,8 @@ def test_parser_event_relation_send():
     assert er["from_event_id"] is None
     assert er["to_event_id"] == 0x1000000000000006
     assert er["from_sm_id"] is None
+    assert er["from_time"] is None
+    assert er["to_time"] == u.ns("2026-07-06 19:44:22.175353000")
 
 
 def test_parser_event_relation_recv():
@@ -48,6 +81,9 @@ def test_parser_event_relation_recv():
     assert er["to_event_id"] == 0x100000000000000c
     assert er["from_sm_id"] == 0x1000000000000005
     assert er["to_sm_id"] == 0x1000000000000005
+    expected_time = u.ns("2026-07-06 19:44:22.175565000")
+    assert er["from_time"] == expected_time
+    assert er["to_time"] == expected_time
 
 
 def test_parser_event_attribute():
@@ -64,6 +100,16 @@ def test_parser_event_attribute():
     assert attribute["key"] == "raft:role"
     assert attribute["value"] == "Follower"
 
+def test_parser_event_attribute_normalizes_boolean_to_lowercase_text():
+    line = (
+        '{"timestamp":"2026-07-22 08:28:19.113535000",'
+        '"extra_fields":{"kind":"event_attribute",'
+        '"event_id":1152921504606846988,"key":"message:vote_granted",'
+        '"value":true}}'
+    )
+    attribute = parser().parse([line])["event_attribute"][0]
+    assert attribute["value"] == "true"
+
 
 def test_parser_sm_relation():
     line = (
@@ -76,6 +122,11 @@ def test_parser_sm_relation():
     assert len(records["state_machine_relation"]) == 1
     smr = records["state_machine_relation"][0]
     assert smr["relation"] == "top-to-raft"
+    assert records["state_machine"] == [{
+        "id": 1152921504606848087,
+        "name": "top",
+        "type": "top",
+    }]
 
 
 def test_parser_state_machine():
