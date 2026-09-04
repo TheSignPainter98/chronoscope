@@ -1,9 +1,6 @@
 #!/usr/bin/env -S gawk -M -f
 
-# Translates raft_trace_fat.txt into Chronoscope JSONL (see log-entry-schema.json).
-#
-# Only top-level field is "timestamp" (the schema forbids other top-level
-# properties); every schema field of the entry variant lives in "extra_fields".
+# Translates the old text-based log format into the new per-line JSON one, enabling old logs to be used with the new chronoscope parser.
 #
 # Discrepancies between the trace format / raft_chronoscope.yaml and the schema:
 #
